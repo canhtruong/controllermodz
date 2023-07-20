@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <!-- Header -->
+        <referenceContainer name="header.container">
+            <container name="header.messages.container" htmlTag="div" htmlClass="messages-container" before="-">
+                <block class="Magento\Cms\Block\Block" before="-">
+                    <arguments>
+                        <argument name="block_id" xsi:type="string">messages_bar</argument>
+                    </arguments>
+                </block>
+            </container>
+
+            <container name="header.benefits.container" htmlTag="div" htmlClass="benefits-container" after="-">
+                <block class="Magento\Cms\Block\Block" before="-">
+                    <arguments>
+                        <argument name="block_id" xsi:type="string">benefits_bar</argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+
+        <referenceContainer name="header.icons">
+            <block class="Magento\Framework\View\Element\Template" name="search-icon" template="Magento_Theme::html/header/search-icon.phtml" ttl="3600" before="help-icon" />
+            <block class="Magento\Framework\View\Element\Template" name="help-icon" template="Magento_Theme::html/header/help-icon.phtml" ttl="3600" after="search-icon" />
+            <block class="Magento\Framework\View\Element\Template" name="account-icon" template="Magento_Theme::html/header/account-icon.phtml" ttl="3600" after="help-icon" />
+
+        </referenceContainer>
+
+        <!-- Footer -->
+        <referenceContainer name="footer-container">
+            <!-- PreFooter -->
+            <container name="footer.above" htmlTag="div" htmlClass="footer above" before="back-to-top">
+                <block class="Magento\Cms\Block\Block">
+                    <arguments>
+                        <argument name="block_id" xsi:type="string">above_footer_usp</argument>
+                    </arguments>
+                </block>
+            </container>
+            <!-- Footer Top -->
+            <container name="footer.top" htmlTag="div" htmlClass="footer top" before="footer.content">
+                <block class="Magento\Cms\Block\Block">
+                    <arguments>
+                        <argument name="block_id" xsi:type="string">contact_us</argument>
+                    </arguments>
+                </block>
+            </container>
+            <!-- Footer Content -->
+            <referenceContainer name="footer">
+                <block class="Magento\Cms\Block\Block">
+                    <arguments>
+                        <argument name="block_id" xsi:type="string">footer_links</argument>
+                    </arguments>
+                </block>
+            </referenceContainer>
+            <!-- Footer Top -->
+            <container name="footer.bottom" htmlTag="div" htmlClass="footer bottom" after="-" />
+        </referenceContainer>
+
+        <!-- Removing Magento Native Blocks -->
+        <referenceBlock name="currency" remove="true" />
+        <referenceBlock name="report.bugs" remove="true" />
+        <referenceBlock name="footer_links" remove="true" />
+        <referenceBlock name="compare-link" remove="true" />
+        <referenceBlock name="wishlist-link" remove="true" />
+        <referenceBlock name="wish-list-icon" remove="true" />
+
+        <!-- Moving Elements to the new Containers -->
+        <move element="top.search" destination="header.container" before="header.benefits.container" />
+        <move element="navigation.sections" destination="header-wrapper" before="header.icons" />
+        <move element="footer.social" destination="footer.bottom" before="-" />
+        <move element="footer.logo" destination="footer.bottom" before="amtheme.footer.payment.methods.block" />
+        <move element="amtheme.footer.payment.methods.block" destination="footer.bottom" after="-" />
+        <move element="footer_links.wrap" destination="before.body.end" before="-" />
+        <move element="form.subscribe" destination="footer.top" after="-" />
+
+    </body>
+</page>

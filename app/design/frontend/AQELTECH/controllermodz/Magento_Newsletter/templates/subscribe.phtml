@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @var $block Magento\Newsletter\Block\Subscribe
+ * @var $viewModel Amasty\JetTheme\ViewModel\Newsletter\NewsletterConfigurationViewModel
+ * @var $escaper Magento\Framework\Escaper
+ */
+
+$viewModel = $block->getViewModel();
+$isNewsletterEnabled = $viewModel->isShowNewsletterForm();
+$newsletterImage = $viewModel->getBackgroundImage();
+$imagePosition = $viewModel->getImagePosition();
+$textPosition = $viewModel->getTextPosition();
+$formPosition = $viewModel->getFormPosition();
+
+$view = $textPosition == 'inline' ? ' -horizontal-view' : ' -vertical-view';
+?>
+
+<?php if ($isNewsletterEnabled) : ?>
+    <div class="amtheme-newsletter-block amtheme-newsletter">
+        <div class="amtheme-container">
+            <div class="amtheme-content <?= /* @noEscape */ $view . ' -' . $formPosition ?>">
+                <div class="amtheme-description -<?= /* @noEscape */ $textPosition ?>">
+                    <h4 class="amtheme-title">
+                        <?= $escaper->escapeHtml($viewModel->getHeadlineText()) ?>
+                    </h4>
+                    <p class="amtheme-text">
+                        <?= $escaper->escapeHtml($viewModel->getAdditionalText()) ?>
+                    </p>
+                </div>
+                <form class="amtheme-form subscribe -<?= /* @noEscape */ $formPosition ?>" action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>" method="post" data-mage-init='{"validation": {"errorClass": "mage-error"}}' id="newsletter-validate-detail">
+                    <div class="amtheme-field newsletter">
+                        <label class="amtheme-label" for="newsletter">
+                            <input class="amtheme-input" id="newsletter" style="background-color: transparent !important;" name="email" type="email" title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>" placeholder="Sign up for latest news and offers" data-mage-init='{"mage/trim-input":{}}' data-validate="{required:true, 'validate-email':true}" />
+                        </label>
+                        <?php $buttonTitle = __('Join') ?>
+                        <button class="action subscribe secondary size-s" title="<?= $escaper->escapeHtmlAttr($buttonTitle) ?>" type="submit" aria-label="<?= $escaper->escapeHtmlAttr($buttonTitle) ?>">
+                            <?= $escaper->escapeHtml($buttonTitle) ?>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

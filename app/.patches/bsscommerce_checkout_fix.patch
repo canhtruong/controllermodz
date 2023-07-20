@@ -1,0 +1,153 @@
+--- a/view/frontend/requirejs-config.js	2022-08-01 21:00:10.000000000 +0300
++++ b/view/frontend/requirejs-config.js	2022-08-03 20:17:15.852747700 +0300
+@@ -53,6 +53,9 @@
+             },
+             'Adyen_Payment/js/view/payment/method-renderer/adyen-cc-method': {
+                 'Bss_OneStepCheckout/js/view/adyen-pay/adyen-cc-method': true
++            },
++            'Magento_Checkout/js/action/select-billing-address': {
++                'Bss_OneStepCheckout/js/action/select-billing-address-mixin': true
+             }
+         }
+     }
+
+--- a/view/frontend/web/js/view/billing-address.js	2022-08-01 21:00:10.000000000 +0300
++++ b/view/frontend/web/js/view/billing-address.js	2022-08-03 20:16:47.817308000 +0300
+@@ -15,7 +15,7 @@
+  * @license   http://bsscommerce.com/Bss-Commerce-License.txt
+  */
+ 
+-define([
++ define([
+     'ko',
+     'jquery',
+     'underscore',
+@@ -112,11 +112,18 @@
+                 } else {
+                     if (!this.isAddressSameAsShipping() && (newAddress !== null && typeof newAddress === 'object' && !newAddress.regionId && (!newAddress.street || !newAddress['street'][0]))) {
+                         this.isAddressSameAsShipping(true);
++                        window.isAddressSameAsShipping = true;
+                     } else {
+                         this.isAddressSameAsShipping(
+                             newAddress != null &&
+                             newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() //eslint-disable-line eqeqeq
+                         );
++                        if (newAddress != null &&
++                            newAddress.getCacheKey() == quote.shippingAddress().getCacheKey()) {
++                            window.isAddressSameAsShipping = true;
++                        } else {
++                            window.isAddressSameAsShipping = false;
++                        }
+                     }
+                 }
+ 
+
+--- /dev/null	2022-08-03 15:50:44.516624000 +0300
++++ b/view/frontend/web/js/action/select-billing-address-mixin.js	2022-08-02 07:16:58.000000000 +0300
+@@ -0,0 +1,39 @@
++/**
++ * BSS Commerce Co.
++ *
++ * NOTICE OF LICENSE
++ *
++ * This source file is subject to the EULA
++ * that is bundled with this package in the file LICENSE.txt.
++ * It is also available through the world-wide-web at this URL:
++ * http://bsscommerce.com/Bss-Commerce-License.txt
++ *
++ * @category  BSS
++ * @package   Bss_OneStepCheckout
++ * @author    Extension Team
++ * @copyright Copyright (c) 2017-2022 BSS Commerce Co. ( http://bsscommerce.com )
++ * @license   http://bsscommerce.com/Bss-Commerce-License.txt
++ */
++define([
++    'jquery',
++    'mage/utils/wrapper',
++    'Magento_Checkout/js/model/quote'
++], function ($, wrapper, quote) {
++    'use strict';
++
++    return function (selectBillingAddressAction) {
++        return wrapper.wrap(selectBillingAddressAction, function (selectBillingAddress, billingAddress) {
++            if (window.isAddressSameAsShipping == undefined) {
++                window.isAddressSameAsShipping = true;
++            }
++            if (quote.shippingAddress() && !billingAddress && quote.billingAddress) {
++                quote.billingAddress(quote.shippingAddress());
++                billingAddress = quote.shippingAddress();
++            }
++            if (billingAddress.getCacheKey() != quote.shippingAddress().getCacheKey() && window.isAddressSameAsShipping) {
++                billingAddress = quote.shippingAddress();
++            }
++            return selectBillingAddress(billingAddress);
++        });
++    };
++});
+
+--- a/Plugin/Block/Checkout/Checkout/LayoutProcessor.php	2022-08-03 20:26:09.000000000 +0300
++++ b/Plugin/Block/Checkout/Checkout/LayoutProcessor2.php	2022-08-11 14:52:12.287178200 +0300
+@@ -20,6 +20,8 @@
+ 
+ use Bss\OneStepCheckout\Helper\Config;
+ use Bss\OneStepCheckout\Helper\Data;
++use Magento\ReCaptchaUi\Model\IsCaptchaEnabledInterface;
++use Magento\ReCaptchaUi\Model\UiConfigResolverInterface;
+ 
+ /**
+  * Class LayoutProcessor
+@@ -41,16 +43,32 @@
+     protected $dataHelper;
+ 
+     /**
++     * @var IsCaptchaEnabledInterface
++     */
++    protected $captchaEnabled;
++
++    /**
++     * @var UiConfigResolverInterface
++     */
++    protected $captchaUiConfigResolver;
++
++    /**
+      * LayoutProcessor constructor.
+      * @param Config $configHelper
+      * @param Data $dataHelper
++     * @param IsCaptchaEnabledInterface $captchaEnabled
++     * @param UiConfigResolverInterface $captchaUiConfigResolver
+      */
+     public function __construct(
+         Config $configHelper,
+-        Data $dataHelper
++        Data $dataHelper,
++        IsCaptchaEnabledInterface $captchaEnabled,
++        UiConfigResolverInterface $captchaUiConfigResolver
+     ) {
+         $this->configHelper = $configHelper;
+         $this->dataHelper = $dataHelper;
++        $this->captchaEnabled = $captchaEnabled;
++        $this->captchaUiConfigResolver = $captchaUiConfigResolver;
+     }
+ 
+     /**
+@@ -84,6 +102,20 @@
+             ['billing-address-form-shared'] = $component;
+         }
+ 
++        $key = 'place_order';
++        if ($this->captchaEnabled->isCaptchaEnabledFor($key)) {
++            $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
++            ['payment']['children']['beforeMethods']['children']['place-order-recaptcha-container']['children']
++            ['place-order-recaptcha']['settings'] = $this->captchaUiConfigResolver->get($key);
++        } else {
++            if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
++                ['payment']['children']['beforeMethods']['children']['place-order-recaptcha-container']['children']['place-order-recaptcha'])) {
++                unset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
++                    ['payment']['children']['beforeMethods']['children']['place-order-recaptcha-container']
++                    ['children']['place-order-recaptcha']);
++            }
++        }
++
+         $jsLayout = $this->orderDeliveryDate($jsLayout);
+ 
+         if (!$this->configHelper->isDisplayField('enable_order_comment')) {

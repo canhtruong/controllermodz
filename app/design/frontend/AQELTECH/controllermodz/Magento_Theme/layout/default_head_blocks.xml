@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <meta name="mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+        <meta name="apple-mobile-web-app-title" content="Controller Modz UK"/>
+        <meta name="application-name" content="Controller Modz UK"/>
+        <meta name="msapplication-starturl" content="https://controllermodz.co.uk/"/>
+        <meta name="msapplication-window" content="width=1024;height=768"/>
+        <meta name="msapplication-TileColor" content="#fff"/>
+        <meta name="theme-color" content="#fff"/>
+        <font src="fonts/Abel-Regular.woff"/>
+        <font src="fonts/Teko-Light.woff"/>
+        <font src="fonts/Teko-Regular.woff"/>
+        <font src="fonts/Teko-Medium.woff"/>
+        <font src="fonts/Teko-SemiBold.woff"/>
+        <font src="fonts/Teko-Bold.woff"/>
+        <css src="css/custom.css" rel="stylesheet" type="text/css"/>
+    </head>
+</page>

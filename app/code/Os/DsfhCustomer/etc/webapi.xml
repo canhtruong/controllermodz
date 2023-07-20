@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
+	
+
+	<route method="GET" url="/V1/dsfhcustomerapi/updateappversion">
+		<service class="Os\DsfhCustomer\Api\UpdateappversionManagementInterface" method="updateappversion"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>  
+
+	<route method="POST" url="/V1/dsfhcustomerapi/createapproved">
+		<service class="Os\DsfhCustomer\Api\ApprovedManagementInterface" method="createApproved"/>
+		<resources>
+			<resource ref="Os_DsfhCustomer::dsfhcustomer"/>
+		</resources>
+	</route>
+
+	<route method="POST" url="/V1/dsfhcustomerapi/updateapproved">
+		<service class="Os\DsfhCustomer\Api\ApprovedManagementInterface" method="updateApproved"/>
+		<resources>
+			<resource ref="Os_DsfhCustomer::dsfhcustomer"/>
+		</resources>
+	</route>
+
+	<route method="POST" url="/V1/dsfhcustomerapi/deleteapproved">
+		<service class="Os\DsfhCustomer\Api\ApprovedManagementInterface" method="deleteApproved"/>
+		<resources>
+			<resource ref="Os_DsfhCustomer::dsfhcustomer"/>
+		</resources>
+	</route>
+
+	<route method="POST" url="/V1/dsfhcustomerapi/createdaily">
+		<service class="Os\DsfhCustomer\Api\DailyManagementInterface" method="createDaily"/>
+		<resources>
+			<resource ref="Os_DsfhCustomer::dsfhcustomer"/>
+		</resources>
+	</route>
+
+	<route method="POST" url="/V1/dsfhcustomerapi/updatedaily">
+		<service class="Os\DsfhCustomer\Api\DailyManagementInterface" method="updateDaily"/>
+		<resources>
+			<resource ref="Os_DsfhCustomer::dsfhcustomer"/>
+		</resources>
+	</route>
+
+	<route method="POST" url="/V1/dsfhcustomerapi/deletedaily">
+		<service class="Os\DsfhCustomer\Api\DailyManagementInterface" method="deleteDaily"/>
+		<resources>
+			<resource ref="Os_DsfhCustomer::dsfhcustomer"/>
+		</resources>
+	</route>
+
+	<route method="POST" url="/V1/dsfhcustomerapi/createreceipt">
+		<service class="Os\DsfhCustomer\Api\ReceiptManagementInterface" method="createReceipt"/>
+		<resources>
+			<resource ref="Os_DsfhCustomer::dsfhcustomer"/>
+		</resources>
+	</route>
+
+	<route method="POST" url="/V1/dsfhcustomerapi/updatereceipt">
+		<service class="Os\DsfhCustomer\Api\ReceiptManagementInterface" method="updateReceipt"/>
+		<resources>
+			<resource ref="Os_DsfhCustomer::dsfhcustomer"/>
+		</resources>
+	</route>
+
+	<route method="POST" url="/V1/dsfhcustomerapi/deletereceipt">
+		<service class="Os\DsfhCustomer\Api\ReceiptManagementInterface" method="deleteReceipt"/>
+		<resources>
+			<resource ref="Os_DsfhCustomer::dsfhcustomer"/>
+		</resources>
+	</route>
+
+	<route method="POST" url="/V1/dsfhcustomerapi/createsuggested">
+		<service class="Os\DsfhCustomer\Api\SuggestedManagementInterface" method="createSuggested"/>
+		<resources>
+			<resource ref="Os_DsfhCustomer::dsfhcustomer"/>
+		</resources>
+	</route>
+
+	<route method="POST" url="/V1/dsfhcustomerapi/updatesuggested">
+		<service class="Os\DsfhCustomer\Api\SuggestedManagementInterface" method="updateSuggested"/>
+		<resources>
+			<resource ref="Os_DsfhCustomer::dsfhcustomer"/>
+		</resources>
+	</route>
+
+	<route method="POST" url="/V1/dsfhcustomerapi/deletesuggested">
+		<service class="Os\DsfhCustomer\Api\SuggestedManagementInterface" method="deleteSuggested"/>
+		<resources>
+			<resource ref="Os_DsfhCustomer::dsfhcustomer"/>
+		</resources>
+	</route>
+
+</routes>

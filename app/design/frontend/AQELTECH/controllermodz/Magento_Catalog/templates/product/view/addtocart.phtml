@@ -1,0 +1,39 @@
+<?php
+/**
+ * @var $block Magento\Catalog\Block\Product\View
+ * @var $escaper Magento\Framework\Escaper
+ */
+?>
+
+<?php $_product = $block->getProduct(); ?>
+<?php $buttonTitle = __('Add to Cart'); ?>
+<?php if ($_product->isSaleable()):?>
+    <div class="box-tocart">
+        <div class="fieldset">
+            <div class="actions">
+                <button type="submit"
+                        title="<?= $escaper->escapeHtml($buttonTitle) ?>"
+                        class="action primary tocart"
+                        data-amtheme-js="addtocart-button"
+                        id="product-addtocart-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round">
+                        <path d="M8.586 17.857c0 .167-.049.33-.142.468a.85.85 0 0 1-.378.311.84.84 0 0 1-.487.048.85.85 0 0 1-.432-.231.846.846 0 0 1 .127-1.297.847.847 0 0 1 .791-.078.83.83 0 0 1 .273.183c.078.078.14.171.183.273a.83.83 0 0 1 .064.323zm9.271 0a.84.84 0 0 1-.142.468.844.844 0 0 1-1.297.128.846.846 0 0 1-.183-.919.84.84 0 0 1 .311-.378.85.85 0 0 1 .468-.142.84.84 0 0 1 .843.843z"/>
+                        <path d="M1 1h3.371L6.63 12.286a1.683 1.683 0 0 0 1.686 1.357h8.192a1.686 1.686 0 0 0 1.686-1.357l1.349-7.071H5.214" stroke-linecap="round"/>
+                    </svg>
+                    <span class="amtheme-title">
+                        <?= $escaper->escapeHtml($buttonTitle) ?>
+                    </span>
+                </button>
+                <?= $block->getChildHtml('', true) ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/js/validate-product": {}
+        }
+    }
+</script>

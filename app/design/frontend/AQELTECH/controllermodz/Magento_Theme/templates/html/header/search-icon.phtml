@@ -1,0 +1,32 @@
+<a class="search-icon" href="javascript:void(0)">
+    <svg id="search-open" xmlns="http://www.w3.org/2000/svg" width="33.056" height="35" fill="none" xmlns:v="https://vecta.io/nano" viewBox="0 0 33.056 35">
+        <path d="M14.671 0.659c8.05 0 14.584 6.533 14.584 14.584s-6.533 14.584 -14.584 14.584 -14.584 -6.533 -14.584 -14.584 6.533 -14.584 14.584 -14.584zm0 25.926c6.265 0 11.342 -5.077 11.342 -11.342s-5.077 -11.342 -11.342 -11.342 -11.342 5.075 -11.342 11.342 5.075 11.342 11.342 11.342zm13.749 0.115l4.583 4.583 -2.293 2.293 -4.583 -4.583 2.291 -2.291z" />
+    </svg>
+    <svg id="search-close" xmlns="http://www.w3.org/2000/svg" width="30" height="30" stroke="none" stroke-linecap="round" stroke-linejoin="round" fill="#000" fill-rule="nonzero" viewBox="0 0 30 30">
+        <path d="M0.885 26.334a0.875 0.875 0 0 1 -0.623 -1.5l24.61 -24.61a0.88 0.88 0 0 1 1.208 0.034c0.33 0.33 0.345 0.86 0.034 1.208l-24.61 24.61a0.867 0.867 0 0 1 -0.62 0.258z" />
+        <path d="M25.493 26.334a0.875 0.875 0 0 1 -0.623 -0.258L0.26 1.466A0.88 0.88 0 0 1 0.294 0.258 0.88 0.88 0 0 1 1.503 0.223l24.61 24.61a0.88 0.88 0 0 1 -0.62 1.5z" />
+    </svg>
+
+    <label><?= $block->escapeHtml(__('Search')); ?></label>
+</a>
+<script>
+    require(["jquery"], function($) {
+        'use strict';
+
+        const searchToggle = $('.search-icon');
+        const searchContainer = $('header > .block-search');
+        const searchInput = $('header > .block-search .input-text');
+
+        $(function() {
+            searchToggle.on('click', function() {
+                console.log('triggered');
+                searchToggle.toggleClass('active');
+                searchContainer.slideToggle('slow');
+                if (searchInput.is(':visible')) {
+                    console.log('triggered again')
+                    searchInput.focus();
+                }
+            })
+        })
+    })
+</script>

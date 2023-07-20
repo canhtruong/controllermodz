@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="css/views/catalog.css" />
+    </head>
+    <body>
+        <move element="page.messages" destination="page.top" after="breadcrumbs" />
+        <move element="wrapper.description" destination="main" before="-" />
+
+        <!-- Removing Magento Native Blocks -->
+        <referenceBlock name="catalog.compare.link" remove="true" />
+        <referenceBlock name="catalog.compare.sidebar" remove="true" />
+        <referenceBlock name="catalogsearch.product.addto.compare" remove="true" />
+        <referenceBlock name="category.product.addto.compare" remove="true" />
+        <referenceBlock name="crosssell.product.addto.compare" remove="true" />
+        <referenceBlock name="related.product.addto.compare" remove="true" />
+        <referenceBlock name="upsell.product.addto.compare" remove="true" />
+        <referenceBlock name="view.addto.compare" remove="true" />
+        <referenceBlock name="product.quickview.info.name" remove="true" />
+    </body>
+</page>

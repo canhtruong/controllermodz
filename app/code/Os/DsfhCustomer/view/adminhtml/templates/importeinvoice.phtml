@@ -1,0 +1,49 @@
+<style type="text/css">
+	.import_wrap {
+  border: 1px solid #dedede;
+  width: 100%;
+  float: left;
+  padding: 50px;
+}
+.import_left, .import_right {
+  width: 100%;
+  float: left;
+  text-align: center;
+}
+#files {
+  width: 300px;
+  margin: auto;
+}
+#myInputautocomplete-list div {
+  width: 300px;
+  text-align: left;
+  margin: auto;
+  cursor: pointer;
+  padding: 1px 5px;
+}
+#myInputautocomplete-list div:hover {
+  background: #196d39;
+  color: #fff;
+}
+#myInput{ width: 300px;height: 34px;font-size: 16px; }
+.autocomplete{ width:100%; }
+.cwsFiles{ display:none; }
+</style>
+<script type="text/javascript">
+	var countries = [];
+</script>
+<div class="import_wrap">
+	<form method="post" action="<?php echo $block->getUrl('dsfhcustomer/einvoice/importpost') ?>" id="import_edit_form" enctype="multipart/form-data">
+	
+	<div class="import_right">
+		<input name="form_key" type="hidden" value="<?php echo $block->getFormKey() ?>" />
+		<div class="entry-edit form-inline">
+			<span style="margin-right: 15px;"><?php echo __("Upload file") ?></span>
+			<input type="file" class="input-file required-entry _required" title="Select File to Import" value=""  name="filename" id="filename" >		
+			<div class="admin__field field field-filename"></div>
+		</div>
+	</div>
+	
+	<input type="submit" value="Import" style="height: 35px;width: 130px;background: #eb5202;color: #fff;/*! font-weight: bold; */border: #eb5202;font-size: 1.6rem;float: right;margin-top: 65px;" />
+	</form>
+</div>

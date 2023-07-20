@@ -1,0 +1,169 @@
+<?php
+    $approveds = $this->getApprovedByRelease();
+    $firstItem = $approveds->getFirstItem();
+    
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $priceHelper = $objectManager->create('Magento\Framework\Pricing\Helper\Data');
+?>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<style type="text/css">
+ .page-main > .page-title-wrapper .page-title {
+    display: none;
+}
+ .page-wrapper > .breadcrumbs{ max-width: 100%; }  
+.col2-left-layout .col-left.sidebar {
+    padding-right: 12px;
+    align-self: flex-start;
+}
+.sidebar .left_my_account {
+    background: #000 none repeat scroll 0 0;
+    padding: 20px;
+    text-align: center;
+}
+.sidebar .left_my_account p.icon {
+    margin-bottom: 20px;
+}
+.sidebar .left_my_account p.name {
+    font-weight: 600;
+}
+.sidebar .left_my_account p {
+    color: #ffffff;
+    margin: 0;
+}
+.sidebar .block-account .block-content {
+    background: rgba(0, 0, 0, 0) linear-gradient(to right, #196d39, #dff0d8) repeat scroll 0 0;
+    padding-top: 20px;
+}
+.block-account ul li, .block.block-blog-categories .blog-category {
+    padding: 8px 3px 8px 18px;
+    position: relative;
+    line-height: 1.3;
+    border-bottom: 1px solid #ddd;
+        border-bottom-color: rgb(221, 221, 221);
+}
+.sidebar .block-account .block-content li {
+    border-color: #c99597;
+    margin: 0 20px;
+    padding: 5px 0;
+}
+.fa {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.sidebar .left_my_account .icon span {
+    background: #afafc3 none repeat scroll 0 0;
+    border: 2px solid #6b6db6;
+    border-radius: 50%;
+    display: inline-block;
+    font-size: 42px;
+    height: 65px;
+    line-height: 60px;
+    width: 65px;
+}
+.sidebar .block-account .block-content li a, .sidebar .block-account .block-content li strong {
+    color: #ffffff;
+    display: block;
+    line-height: 29px;
+    padding: 2px 0 2px 15px;
+}
+.block-account ul li, .block.block-blog-categories .blog-category {
+    line-height: 1.3;
+}
+.sidebar .block-account .block-content li:last-child {
+    border-bottom: 0 none;
+}
+.release_value, .date_value, .request_value {
+  margin-bottom: 10px;
+}
+.os-custom-order {
+  margin-top: 30px;
+}
+</style>
+<div class="col-left sidebar f-left col-lg-3" style="width:22.3% !important;float:left !important;padding: 0 22px 0 0 !important;">
+    <div class="block block-account">
+        <div class="left_my_account">
+            <p class="icon"><span><i class="fa fa-user" aria-hidden="true"></i></span></p>
+            <?php
+                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                $customerSession = $objectManager->create('Magento\Customer\Model\Session'); 
+            ?>
+            <p class="name"><?php echo $customerSession->getCustomer()->getName();  ?></p>
+            <p class="email"><?php echo $customerSession->getCustomer()->getEmail(); ?></p>
+        </div>
+        
+        <div class="block-content">
+            <ul style="padding: 0;list-style: none;">
+                <li><a href="<?php echo $this->getBaseUrl() ?>customer/account/">Account Dashboard</a></li>
+                <li><a href="<?php echo $this->getBaseUrl() ?>customer/account/edit/">Account Information</a></li>
+                <li><a href="<?php echo $this->getBaseUrl() ?>sales/order/history/">My Orders</a></li>
+                <li><a href="<?php echo $this->getBaseUrl() ?>emailorder/invoice/list/">My Invoices</a></li>
+                <li><a href="<?php echo $this->getBaseUrl() ?>daily-on-hand-stock/">Daily On-Hand Stock</a></li>
+                <li><a href="<?php echo $this->getBaseUrl() ?>suggested-order/">Suggested Order</a></li>
+                <li><a href="<?php echo $this->getBaseUrl() ?>approved-release-confirmation/">Approved Releases</a></li>
+                <li><a href="<?php echo $this->getBaseUrl() ?>receipt-confirmation/">Receipt Confirmation</a></li>
+<li><a href="<?php echo $this->getBaseUrl() ?>customer-statement/">Customer Statement</a></li>
+                <li><a href="<?php echo $this->getBaseUrl() ?>notifications/">Notifications</a></li>
+                <li class="last"><a href="<?php echo $this->getBaseUrl() ?>customer/account/subAccount/">Manage Users</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div style="width: 77.7%;float: left;">
+<div class="field">
+	<div class="release_value"><?= __('Release') ?>#<?= $firstItem->getData('RELEASE_NUMBER') ?> </div>
+	<div class="request_value"><?= __('Request') ?> #<?= $firstItem->getData('REQUEST_ID') ?> </div>
+	<?php
+		$currentDate = date($firstItem->getData('DATE'));
+		$DateToStr = strtotime($currentDate);
+		$newDate = date("d/m/Y", $DateToStr);
+	?>
+    <div class="date_value"><?= __('Date') ?>: <?= $newDate ?> </div>
+ </div>
+ <div class="os-custom-order">
+	<div class="table-item">
+		<div class="table_field">
+			<table border="1" style="border-color: #dcdcdc;" cellpadding="5" cellspacing="5">
+				<thead> 
+					<tr>
+						<th style="background: #f6f6f6;color: #777;padding: 10px 5px;border: 1px solid #f6f6f6;font-weight: 600;font-size: 12px;text-align: center;"><?= __('Tamer item') ?> #</th>					
+						<th style="background: #f6f6f6;color: #777;padding: 10px 5px;border: 1px solid #f6f6f6;font-weight: 600;font-size: 12px;text-align: center;"><?= __('Customer Item') ?> #</th>
+						<th style="background: #f6f6f6;color: #777;padding: 10px 5px;border: 1px solid #f6f6f6;font-weight: 600;font-size: 12px;text-align: center;"><?= __('Item Description') ?></th>
+						<th style="background: #f6f6f6;color: #777;padding: 10px 5px;border: 1px solid #f6f6f6;font-weight: 600;font-size: 12px;text-align: center;"><?= __('UOM') ?></th>
+						<th style="background: #f6f6f6;color: #777;padding: 10px 5px;border: 1px solid #f6f6f6;font-weight: 600;font-size: 12px;text-align: center;"><?= __('Quantity') ?></th>
+						<th style="background: #f6f6f6;color: #777;padding: 10px 5px;border: 1px solid #f6f6f6;font-weight: 600;font-size: 12px;text-align: center;"><?= __('Price') ?></th>
+						<th style="background: #f6f6f6;color: #777;padding: 10px 5px;border: 1px solid #f6f6f6;font-weight: 600;font-size: 12px;text-align: center;"><?= __('Amount') ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php if (count($approveds) > 0) : ?>
+						<?php $total = 0.0 ?>
+						<?php foreach ($approveds as $approved) : ?>
+							<?php
+								$total = $total + $approved->getData('AMOUNT');
+							?>
+							<tr>
+								<td style="border-color: #dcdcdc;"><?= $approved->getData('TAMER_ITEM_NUMBER') ?></td>
+								<td style="border-color: #dcdcdc;"><?= $approved->getData('FAKIEH_ITEM_NUMBER') ?></td>
+								<td style="border-color: #dcdcdc;"><?= $approved->getData('ITEM_DESCRIPTION') ?></td>
+								<td style="border-color: #dcdcdc;"><?= $approved->getData('UOM') ?></td>
+								<td style="border-color: #dcdcdc;"><?= $approved->getData('QUANTITY') ?></td>
+								<td style="border-color: #dcdcdc;"><?= $priceHelper->currency($approved->getData('PRICE'), true, false); ?></td>
+								<td style="border-color: #dcdcdc;"><?= $priceHelper->currency($approved->getData('AMOUNT'), true, false); ?></td>
+							</tr>
+						<?php endforeach; ?>
+						<tr>
+							<td colspan="6" style="text-align: right;"><?=__('Total:') ?></td>
+							<td><?= $priceHelper->currency($total, true, false); ?></td>
+						</tr>
+					<?php endif; ?>
+				</tbody>
+			</table>
+		</div>	
+	</div>
+</div>
+</div>

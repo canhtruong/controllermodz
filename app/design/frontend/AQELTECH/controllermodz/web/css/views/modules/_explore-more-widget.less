@@ -1,0 +1,100 @@
+//
+//  Amasty JetTheme Explore More Widget
+//  _____________________________________________
+
+//
+//  Common
+//  ---------------------------------------------
+
+.amtheme-explore-widget {
+    & {
+        margin-top: 35px;
+    }
+
+    > .amtheme-heading {
+        & {
+            padding: 0 0 @indent__sm;
+            border-bottom: 1px solid @amtheme__border__color;
+        }
+
+        > h3 {
+            font-size: @h1__font-size;
+        }
+    }
+
+    > .amtheme-content {
+        margin-top: @indent__l;
+    }
+}
+
+.amtheme-explore-list {
+    &:not(:first-child) {
+        margin-top: 45px;
+    }
+
+    > .amtheme-heading {
+        font-weight: 400;
+    }
+
+    > .amtheme-list {
+        margin-top: @indent__base;
+        list-style: none;
+        padding-inline-start: 0;
+    }
+
+    .amtheme-item:not(:first-child) {
+        margin-top: @indent__sm;
+    }
+}
+
+//
+//  Mobile+
+//  ---------------------------------------------
+
+@media screen and (min-width: @screen__xs), print {
+    .amtheme-explore-widget {
+        > .amtheme-content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    }
+
+    .amtheme-explore-list {
+        & {
+            flex-basis: 50%;
+        }
+
+        &:nth-child(-n+2) {
+            margin-top: 0;
+        }
+    }
+}
+
+//
+//  Tablet
+//  ---------------------------------------------
+
+@media screen and (min-width: @screen__m) {
+    .amtheme-explore-list {
+        & {
+            flex-basis: 25%;
+        }
+
+        &:nth-child(-n+4) {
+            margin-top: 0;
+        }
+    }
+}
+
+//
+//  Tablet+
+//  ---------------------------------------------
+
+@media screen and (min-width: @screen__l) {
+    .amtheme-explore-widget {
+        padding: @indent__base;
+        border: 1px solid @amtheme__border__color;
+        border-radius: @amtheme__border-radius__m;
+        background: @amtheme__background-tertiary__color;
+    }
+}

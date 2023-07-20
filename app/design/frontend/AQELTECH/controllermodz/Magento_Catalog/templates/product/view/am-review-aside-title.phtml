@@ -1,0 +1,54 @@
+<?php /** * @author Amasty Team * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com) * @package Jet Theme Lite for Magento 2 */ ?> <?php /** @var $block \Magento\Catalog\Block\Product\View */
+$reviewFormTrigger = 'review-form-open';
+/** @var \Amasty\JetTheme\ViewModel\Review\ReviewViewModel $viewModel */
+$viewModel = $block->getViewModel();
+$reviewsCount = $viewModel->getReviewsCount($block->getProduct());
+$isAdvancedReviewsEnabled = $viewModel->isAdvancedReviewModuleEnabled(); ?>
+<div class="amtheme-reviews-aside <?= $reviewsCount ? '' : '-am-noreviews'; ?> <?= $isAdvancedReviewsEnabled ? '-amrev' : ''; ?>" data-amtheme-js="reviews-aside">
+    <div class="amtheme-heading">
+        <svg class="amtheme-icon" data-amtheme-js="review-back" aria-label="<?= $block->escapeHtml(__('Close')); ?>">
+            <use xlink:href="#icon-arrow-left"/>
+        </svg>
+        <span class="amtheme-title"><?= $block->escapeHtml($isAdvancedReviewsEnabled ? __('Customer Reviews') : __('Ratings & Reviews')); ?></span>
+    </div>
+    <?php if (!$isAdvancedReviewsEnabled): ?>
+        <div class="amtheme-content"><?php if ($reviewsCount): ?>
+            <div class="amtheme-rating-wrap">
+                <div class="block-title-cus">
+                    <strong><?php /* @escapeNotVerified */ echo __('CUSTOMER REVIEWS'. ' ('.$reviewsCount.' reviews)') ?></strong>
+<!--                    <p>-->
+<!--                         /* @noEscape */ $block->getChildHtml('amtheme-rating-number-aside'); -->
+<!--                    </p>-->
+                </div>
+
+                <?= /* @noEscape */ $block->getReviewsSummaryHtml($block->getProduct(), false, true) ?>
+            </div>
+            <?php else: ?>
+                <p class="amtheme-noreviews-text"><?= $block->escapeHtml(__('Be the first to review this product')) ?></p>
+            <?php endif; ?>
+            <div class="amtheme-actions">
+                <?php if ($reviewsCount): ?>
+                    <p class="amtheme-description"><?= $block->escapeHtml(__('Share your thoughts with other customers')); ?></p>
+                <?php endif; ?>
+                <button class="action size-s" title="<?= $block->escapeHtml(__('Write review')); ?>"
+                        aria-label="<?= $block->escapeHtml(__('Write review')); ?>"
+                        data-amtheme-js="<?= $block->escapeHtml($reviewFormTrigger); ?>"><?= $block->escapeHtml(__('Write review')); ?></button>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
+<style>
+    @media (min-width: 768px){
+        .amtheme-content .block-title-cus {
+            font-size: 3.2rem;
+            letter-spacing: 0.035em;
+        }
+        /*#product-review-container{*/
+        /*    margin-top: -190px !important;*/
+        /*}*/
+        /*.amtheme-reviews-aside{*/
+        /*    z-index: 999;*/
+        /*    min-height: 160px;*/
+        /*}*/
+    }
+</style>

@@ -1,0 +1,26 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @package Amasty_JetTheme
+ */
+?>
+<?php
+/**
+ * @var \Magento\Theme\Block\Html\Header\Logo $block
+ */
+$storeName = $block->getThemeName() ? $block->getThemeName() : $block->getLogoAlt()
+?>
+<a
+    class="logo"
+    href="<?= $block->escapeUrl($block->getUrl('')) ?>"
+    title="<?= $block->escapeHtml($storeName) ?>"
+    aria-label="store logo">
+    <img src="<?= $block->escapeUrl($block->getLogoSrc()) ?>"
+         title="<?= $block->escapeHtml($block->getLogoAlt()) ?>"
+         alt="<?= $block->escapeHtml($block->getLogoAlt()) ?>"
+         class="logo-image"
+        <?= $block->getLogoWidth() ? 'width="' . $block->escapeHtml($block->getLogoWidth()) . '"' : '' ?>
+        <?= $block->getLogoHeight() ? 'height="' . $block->escapeHtml($block->getLogoHeight()) . '"' : '' ?>
+    />
+</a>

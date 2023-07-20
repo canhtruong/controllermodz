@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+
+    <menu>
+
+    	<add id="Os_DsfhCustomer::dsfhcustomer" title="Dsfh Customer" module="Os_DsfhCustomer" sortOrder="15" resource="Os_DsfhCustomer::dsfhcustomer"/>
+
+        <add id="Os_DsfhCustomer::approveds" title="Manage Customer Approved" module="Os_DsfhCustomer" sortOrder="5" action="dsfhcustomer/approveds/index" resource="Os_DsfhCustomer::approveds" parent="Os_DsfhCustomer::dsfhcustomer"/>
+        <add id="Os_DsfhCustomer::dailys" title="Manage Customer Daily" module="Os_DsfhCustomer" sortOrder="10" action="dsfhcustomer/dailys/index" resource="Os_DsfhCustomer::dailys" parent="Os_DsfhCustomer::dsfhcustomer"/>
+        <add id="Os_DsfhCustomer::receipts" title="Manage Customer Receipt" module="Os_DsfhCustomer" sortOrder="15" action="dsfhcustomer/receipts/index" resource="Os_DsfhCustomer::receipts" parent="Os_DsfhCustomer::dsfhcustomer"/>
+        <add id="Os_DsfhCustomer::suggesteds" title="Manage Customer Suggested" module="Os_DsfhCustomer" sortOrder="20" action="dsfhcustomer/suggesteds/index" resource="Os_DsfhCustomer::suggesteds" parent="Os_DsfhCustomer::dsfhcustomer"/>
+        <add id="Os_DsfhCustomer::einvoices" title="E-Invoice Management" module="Os_DsfhCustomer" sortOrder="20" action="einvoicemanagement/invoices/index" resource="Os_DsfhCustomer::einvoices" parent="Os_DsfhCustomer::dsfhcustomer"/>
+        <add id="Os_DsfhCustomer::imports" title="Import Items" module="Os_DsfhCustomer" sortOrder="21" resource="Os_DsfhCustomer::suggesteds" parent="Os_DsfhCustomer::dsfhcustomer"/>
+        <add id="Os_DsfhCustomer::suggestedsimport" title="Import Suggested" module="Os_DsfhCustomer" sortOrder="22" action="dsfhcustomer/suggesteds/import" resource="Os_DsfhCustomer::suggestedsimport" parent="Os_DsfhCustomer::imports"/>
+        <add id="Os_DsfhCustomer::dailysimport" title="Import Dailys" module="Os_DsfhCustomer" sortOrder="22" action="dsfhcustomer/dailys/import" resource="Os_DsfhCustomer::dailysimport" parent="Os_DsfhCustomer::imports"/>
+        <add id="Os_DsfhCustomer::dailyseinvoice" title="Import E-Invoice" module="Os_DsfhCustomer" sortOrder="23" action="dsfhcustomer/einvoice/import" resource="Os_DsfhCustomer::dailyseinvoice" parent="Os_DsfhCustomer::imports"/>
+    </menu>
+
+</config>

@@ -1,0 +1,37 @@
+<?php
+/**
+ * @var $block Magento\Wishlist\Block\Catalog\Product\View\AddTo\Wishlist
+ * @var $amLayoutViewModel Amasty\JetTheme\ViewModel\ProductPage\ProductPageViewModel
+ * @var $escaper Magento\Framework\Escaper
+ */
+
+$amLayoutViewModel = $block->getData('amLayoutViewModel');
+$productId = $block->getProduct()->getId();
+?>
+
+<?php if ($block->isWishListAllowed()): ?>
+    <?php if ($amLayoutViewModel->showAddToWishlist()): ?>
+        <a rel="nofollow" href="#"
+           class="action towishlist"
+           data-post='<?= /* @noEscape */ $block->getWishlistParams() ?>'
+           data-action="add-to-wishlist"
+           title="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>"
+           aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>">
+            <span class="amtheme-circle-icon">
+                <svg class="amtheme-icon -hover-bg">
+                    <use xlink:href="#icon-wishlist"></use>
+                </svg>
+            </span>
+            <span class="amtheme-title">
+                <?= $escaper->escapeHtml(__('Add to Wish List')) ?>
+            </span>
+        </a>
+    <?php endif; ?>
+    <script type="text/x-magento-init">
+    {
+        "body": {
+            "addToWishlist": "<?= /* @noEscape */ $escaper->escapeJs($block->getWishlistOptionsJson()) ?>"
+        }
+    }
+</script>
+<?php endif; ?>

@@ -1,0 +1,343 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_AjaxCart
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+?>
+<?php
+// @codingStandardsIgnoreFile
+
+/**
+ * @var $block \Bss\AjaxCart\Block\Ajax\Template
+ */
+?>
+<?php
+    $helper = $block->getAjaxHelper();
+    $imageHelper = $block->getImageHelper();
+    $resultItem = $block->getItem();
+    $product = $resultItem->getProduct();
+    $resultPrice = $helper->getProductTaxDisplayType() == \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX ? $resultItem->getPrice() : $resultItem->getPriceInclTax();
+    $weeTax = $block->getWeeHelper()->getWeeeTaxAppliedAmount($resultItem);
+    if ($weeTax) {
+        $resultPrice += $weeTax;
+    }
+    $cart = $block->getCartHelper()->getCart();
+    $showContinue = $helper->isShowContinueBtn();
+    $showCartInfo = $helper->isShowCartInfo();
+    $showCheckoutLink = $helper->isShowCheckoutLink();
+    $countDown = ($helper->getCountDownTime() > 0) ? $helper->getCountDownTime() : 0;
+    $animation = $helper->getConfigAnimation();
+?>
+<div class="popup">
+    <div class="block">
+        <div class="header">
+            <strong style="color: #03cf62"><?php echo $block->escapeHtml(__('Shopping Cart')); ?></strong>
+        </div>
+        <p class="message">
+            <?php echo $block->escapeHtml(__('You added ')); ?>
+            <a href="<?php echo $block->escapeUrl($product->getProductUrl()); ?>"
+                title="<?php echo $block->escapeHtml($resultItem->getName()); ?>">
+            <?php echo $block->escapeHtml($resultItem->getName());?>
+            </a>
+            <?php echo $block->getRelatedAdded() ? $block->escapeHtml(__(' and related products')) : ''; ?>
+            <?php echo $block->escapeHtml(__(' to your shopping cart.')); ?>
+        </p>
+
+        <div id="popup-main-body">
+            <?php if ($helper->isShowProductImage()) :?>
+                <div class="product-image">
+                    <img src="<?php echo $block->escapeUrl(
+                        $imageHelper->init(
+                            $product,
+                            'category_page_list',
+                            ['height' => $helper->getImageSize() , 'width'=> $helper->getImageSize()]
+                        )->getUrl()
+                    ); ?>">
+                    <?php if ($helper->isShowProductPrice() && $product->getTypeId() != \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) :?>
+                        <div>
+                        <span>
+                            <?php
+                            echo $block->escapeHtml(
+                                $block->getPricingHelper()->currency(
+                                    $resultPrice,
+                                    true,
+                                    false
+                                )
+                            );
+                            ?>
+                        </span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($showCartInfo || $showCheckoutLink) :?>
+                <div class="cart-info">
+                    <?php if ($showCartInfo) : ?>
+                        <div class="items-count">
+                    <span>
+                        <?php
+                        if ($cart->getItemsQty() > 1) {
+                            echo $block->escapeHtml(__('There are '));
+                        } else {
+                            echo $block->escapeHtml(__('There is '));
+                        }
+                        ?>
+                        <a href="<?php echo $block->escapeUrl($block->getUrl('checkout/cart')); ?>">
+                            <?php
+                            echo $block->escapeHtml($cart->getItemsQty());
+                            if ($cart->getItemsQty() > 1) {
+                                echo $block->escapeHtml(__(' items'));
+                            } else {
+                                echo $block->escapeHtml(__(' item'));
+                            }
+                            ?>
+                        </a>
+                        <?php echo $block->escapeHtml(__(' in your cart.')); ?>
+                    </span>
+                        </div>
+                        <div class="subtotal">
+                            <?php $displayType = $helper->getSubtotalDisplayType(); ?>
+                            <?php $quote = $block->getCartHelper()->getQuote(); ?>
+                            <?php
+                            $cartSubTotalInclTax = $block->escapeHtml(
+                                $block->getPricingHelper()->currency(
+                                    $quote->getGrandTotal(),
+                                    true,
+                                    false
+                                )
+                            );
+                            $cartSubTotalExclTax = $block->escapeHtml(
+                                $block->getPricingHelper()->currency(
+                                    $quote->getSubtotal(),
+                                    true,
+                                    false
+                                )
+                            );
+                            ?>
+                            <span>
+                        <?php
+                            if ($displayType == 1) {
+                                echo $block->escapeHtml(__('Cart Subtotal: '));
+                                echo '<span class="price">'.$cartSubTotalExclTax.'</span>';
+                            } else if ($displayType == 2) {
+                                echo $block->escapeHtml(__('Cart Subtotal: '));
+                                echo '<span class="price">'.$cartSubTotalInclTax.'</span>';
+                            }
+                        ?>
+                    </span>
+                            <?php if ($displayType == 3): ?>
+                                <span>
+                            <?php echo $block->escapeHtml(__('Cart Subtotal: ')); ?>
+                            <?php echo '<span class="price">'.$cartSubTotalInclTax.'</span>'; ?>
+                        </span><br>
+                                <span>
+                            <?php echo $cartSubTotalExclTax . $block->escapeHtml(__(' Excl. Tax')); ?>
+                        </span>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($showCheckoutLink) : ?>
+                        <div class="checkout-link">
+                            <a href="<?php echo $block->escapeUrl($block->getUrl('checkout/cart')); ?>">
+                                <span><?php echo $block->escapeHtml(__('View cart')); ?></span>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <?php echo $block->getChildHtml('ajaxcart.popup.suggest'); ?>
+
+    <div class="action clearfix">
+        <div class="checkout-link" style="margin-bottom: 15px;">
+            <a href="<?php echo $block->escapeUrl($block->getUrl('checkout/cart')); ?>">
+                <span><?php echo $block->escapeHtml(__('View and Edit Cart')); ?></span>
+            </a>
+        </div>
+        <div class="btn-viewcart <?php echo (!$showContinue) ? 'full-width' : ''; ?>">
+            <a
+                href="<?php echo $block->escapeUrl($block->getUrl('checkout')); ?>"
+                title="<?php echo $block->escapeHtml(__($helper->getBtnViewcartText())); ?>"
+                class="view-cart"
+            >
+                <button class="viewcart"
+                    type="button"
+                    title="<?php echo $block->escapeHtml(__($helper->getBtnViewcartText())); ?>">
+                    <span><?php echo $block->escapeHtml(__($helper->getBtnViewcartText())); ?></span>
+                    <?php if ($helper->getCountDownActive() == \Bss\AjaxCart\Model\Config\Source\Countdown::POPUP_COUNTDOWN_VIEW_CART_BTN
+                                && $helper->getCountDownTime() > 0) :?>
+                        <span class="<?php echo ($helper->getCountDownActive() == \Bss\AjaxCart\Model\Config\Source\Countdown::POPUP_COUNTDOWN_VIEW_CART_BTN) ? 'countdown' : ''; ?>">
+                            (<?php echo $block->escapeHtml($helper->getCountDownTime()); ?>)
+                        </span>
+                    <?php endif; ?>
+                </button>
+            </a>
+        </div>
+
+        <?php if ($showContinue) : ?>
+        <div class="btn-continue">
+            <button
+                class="continue"
+                type="button"
+                title="<?php echo $block->escapeHtml(__($helper->getBtnContinueText())); ?>"
+            >
+                <span><?php echo $block->escapeHtml(__($helper->getBtnContinueText())); ?></span>
+                <?php if ($helper->getCountDownActive() == \Bss\AjaxCart\Model\Config\Source\Countdown::POPUP_COUNTDOWN_CONTINUE_BTN
+                            && $helper->getCountDownTime() > 0) :?>
+                    <span class="<?php echo ($helper->getCountDownActive() == \Bss\AjaxCart\Model\Config\Source\Countdown::POPUP_COUNTDOWN_CONTINUE_BTN) ? 'countdown' : ''; ?>">
+                        (<?php echo $block->escapeHtml($helper->getCountDownTime()); ?>)
+                    </span>
+                <?php endif; ?>
+            </button>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>
+<style>
+    #bss_ajaxcart_popup {
+        background: #1e2025;
+    }
+    #bss_ajaxcart_popup .header strong {
+        font-size: 20px;
+        margin: 10px 0 20px 0;
+        display: block;
+        color: white !important;
+
+    }
+    #popup-main-body {
+        display: flex;
+        background: #292A2E;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    #popup-main-body .product-image {
+        float: left;
+        margin: 0;
+        padding: 0;
+        width: 100px;
+    }
+    #popup-main-body .cart-info {
+        color: white;
+        font-size: 18px;
+        line-height: normal;
+        text-align: left;
+        padding-left: 20px;
+        overflow: hidden;
+        margin: auto !important;
+        margin-left: 0 !important;
+    }
+    #popup-main-body .product-image > div span {
+        color: #00A15B;
+        font-family: Abel, sans-serif;
+        font-weight: 600;
+    }
+    #bss_ajaxcart_popup .clearfix {
+        clear: both;
+        display: block;
+        float: none;
+        margin-top: 50px !important;
+    }
+    #bss_ajaxcart_popup .clearfix .btn-viewcart span {
+        font-family: Abel, serif !important;
+    }
+    #bss_ajaxcart_popup .btn-continue {
+        width: 50%;
+        float: left;
+        color: #000;
+    }
+    #ajax-suggest .products-grid .product-item-info:hover:after,
+    .products-grid .product-item-info.-hover:after {
+        border: none !important;
+        height: calc(100% + 20px);
+        left: -10px;
+        opacity: 1;
+        top: -10px;
+        width: calc(100% + 20px);
+        background: #292A2E !important;
+    }
+    #ajax-suggest .block-title{
+        color: white;
+        font-size: 17px;
+        margin-top: 15px;
+    }
+    .actions-primary > button span{
+        font-size: 12px !important;
+        text-transform: uppercase;
+        font-family: Abel, sans-serif;
+    }
+    .actions-primary > button{
+        background: transparent !important;
+        border: 2px solid #03cf62 !important;
+        height: 33px;
+        line-height: 0 !important;
+        padding: 0 20px !important;
+        border-radius: 5px;
+    }
+    .actions-primary:hover > button{
+        background: #03cf62 !important;
+    }
+    .product-item-info img {
+        display: unset !important;
+        height: 100px !important;;
+        width: auto !important;
+    }
+    .product-item-info a.product-item-link {
+        color: white;
+        font-family: Abel, sans-serif;
+    }
+    .product-item-info .price-box {
+        align-items: center;
+    }
+    .product-item-info .price-box .price {
+        font-size: 20px;
+    }
+    #bss_ajaxcart_popup .popup .action .btn-continue .view-cart .viewcart {
+        border: 2px solid #04c274 !important;
+        background: #ffffff !important;
+        color: #04c274 !important;
+        font-family: 'blinkerextralight', serif;
+        font-size: 18px;
+        text-transform: uppercase;
+        padding: 10px 20px 10px 20px;
+        border-radius: 40px;
+        text-align: center;
+        line-height: normal;
+        font-weight: 400;
+        width: auto;
+        display: inline-block;
+        transition: all 0.4s ease 0s;
+        -webkit-transition: all 0.4s ease 0s;
+        -moz-transition: all 0.4s ease 0s;
+        -ms-transition: all 0.4s ease 0s;
+        -o-transition: all 0.4s ease 0s;
+        text-decoration: none;
+    }
+    .message {
+        color: white;
+    }
+</style>
+<script type="text/x-magento-init">
+    {
+        "#bss_ajaxcart_popup": {
+            "bssPopup": {
+                "countDown": <?php echo $block->escapeJsQuote($countDown); ?>
+            }
+        }
+    }
+</script>
+

@@ -1,0 +1,9 @@
+--- /dev/null	2022-04-18 04:29:10.140000000 +0300
++++ b/Magento_Theme/web/css/source/_extend.less	2022-04-17 04:27:47.169044800 +0300
+@@ -0,0 +1 @@
++@import '_extend-child.less';
+
+--- /dev/null	2022-04-18 04:29:10.140000000 +0300
++++ b/Magento_Theme/web/css/source/_extend-child.less	2022-04-17 04:27:47.169044800 +0300
+@@ -0,0 +1 @@
++/** Child Template CSS **/

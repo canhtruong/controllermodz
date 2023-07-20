@@ -1,0 +1,309 @@
+<?xml version="1.0" ?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+    <argument name="context" xsi:type="configurableObject">
+		<argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\Context</argument>
+		<argument name="namespace" xsi:type="string">dsfhcustomer_suggesteds_index</argument>
+	</argument>
+
+	<argument name="data" xsi:type="array">
+
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">dsfhcustomer_suggesteds_index.dsfhcustomer_suggesteds_grid_data_source</item>
+			<item name="deps" xsi:type="string">dsfhcustomer_suggesteds_index.dsfhcustomer_suggesteds_grid_data_source</item>
+		</item>
+
+		<item name="spinner" xsi:type="string">dsfhcustomer_suggesteds_index_columns</item>
+
+		<item name="buttons" xsi:type="array">
+			<item name="add" xsi:type="array">
+				<item name="name" xsi:type="string">add</item>
+				<item name="label" translate="true" xsi:type="string">New Suggested Order</item>
+				<item name="class" xsi:type="string">primary</item>
+				<item name="url" xsi:type="string">*/*/new</item>
+			</item>
+		</item>
+
+	</argument>
+
+	<dataSource name="dsfhcustomer_suggesteds_grid_data_source">
+		<argument name="dataProvider" xsi:type="configurableObject">
+			<argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
+			<argument name="name" xsi:type="string">dsfhcustomer_suggesteds_grid_data_source</argument>
+			<argument name="primaryFieldName" xsi:type="string">DSFH_CUSTOMER_SUGGESTED_ID</argument>
+			<argument name="requestFieldName" xsi:type="string">id</argument>
+
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+					<item name="update_url" path="mui/index/render" xsi:type="url"/>
+					<item name="storageConfig" xsi:type="array">
+						<item name="indexField" xsi:type="string">DSFH_CUSTOMER_SUGGESTED_ID</item>
+					</item>
+				</item>
+			</argument>
+
+		</argument>
+	</dataSource>
+
+	<listingToolbar name="listing_top">
+
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="sticky" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+
+        <columnsControls name="columns_controls"/>
+
+        <filterSearch name="fulltext"/>
+
+       <filters name="listing_filters">
+
+            <argument name="data" xsi:type="array">
+                <item name="observers" xsi:type="array">
+                    <item name="column" xsi:type="string">column</item>
+                </item>
+            </argument>
+
+            <settings>
+                <templates>
+                    <filters>
+                        <select>
+                            <param name="template" xsi:type="string">ui/grid/filters/elements/ui-select</param>
+                            <param name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</param>
+                        </select>
+                    </filters>
+                </templates>
+            </settings>
+
+            <filterSelect name="store" provider="${ $.parentName }">
+                <settings>
+                    <captionValue>0</captionValue>
+                    <options class="Magento\Cms\Ui\Component\Listing\Column\Cms\Options"/>
+                    <label translate="true">Store View</label>
+                    <dataScope>store</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
+            </filterSelect>
+
+        </filters>
+
+        <paging name="listing_paging"/>
+
+        <exportButton name="export_button"/>
+
+        <massaction name="listing_massaction">
+
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                     <item name="selectProvider" xsi:type="string">dsfhcustomer_suggesteds_index.dsfhcustomer_suggesteds_index.dsfhcustomer_suggesteds_index_columns.ids</item>
+		            <item name="indexField" xsi:type="string">DSFH_CUSTOMER_SUGGESTED_ID</item>
+                </item>
+            </argument>
+
+            <action name="delete">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">delete</item>
+                        <item name="label" xsi:type="string" translate="true">Delete</item>
+                        <item name="url" xsi:type="url" path="dsfhcustomer/suggesteds/massDelete"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Delete suggesteds</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected suggesteds?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+
+        </massaction>
+
+    </listingToolbar>
+
+	<columns name="dsfhcustomer_suggesteds_index_columns">
+
+		<argument name="data" xsi:type="array">
+
+			<item name="config" xsi:type="array">
+
+				<item name="editorConfig" xsi:type="array">
+					<item name="selectProvider" xsi:type="string">dsfhcustomer_suggesteds_index.dsfhcustomer_suggesteds_index.dsfhcustomer_suggesteds_index_columns.ids</item>
+					<item name="enabled" xsi:type="boolean">true</item>
+					<item name="indexField" xsi:type="string">DSFH_CUSTOMER_SUGGESTED_ID</item>
+					<item name="clientConfig" xsi:type="array">
+						<item name="saveUrl" path="dsfhcustomer/suggesteds/inlineEdit" xsi:type="url"/>
+						<item name="validateBeforeSave" xsi:type="boolean">false</item>
+					</item>
+				</item>
+
+				<item name="childDefaults" xsi:type="array">
+					<item name="fieldAction" xsi:type="array">
+						<item name="provider" xsi:type="string">dsfhcustomer_suggesteds_index.dsfhcustomer_suggesteds_index.dsfhcustomer_suggesteds_index_columns_editor</item>
+						<item name="target" xsi:type="string">startEdit</item>
+						<item name="params" xsi:type="array">
+							<item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+							<item name="1" xsi:type="boolean">true</item>
+						</item>
+					</item>
+				</item>
+
+			</item>
+
+		</argument>
+
+		<selectionsColumn name="ids">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
+                    <item name="indexField" xsi:type="string">DSFH_CUSTOMER_SUGGESTED_ID</item>
+                </item>
+            </argument>
+        </selectionsColumn>
+
+		<column name="DSFH_CUSTOMER_SUGGESTED_ID">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="filter" xsi:type="string">text</item>
+					<item name="sorting" xsi:type="string">asc</item>
+					<item name="label" translate="true" xsi:type="string">ID</item>
+					<item name="sortOrder" xsi:type="number">5</item>
+				</item>
+			</argument>
+		</column>
+
+		<column name="REQUEST_ID">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="filter" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">Request Id</item>
+					<item name="sortOrder" xsi:type="number">10</item>
+					<item name="resizeEnabled" xsi:type="boolean">false</item>
+            		<item name="resizeDefaultWidth" xsi:type="string">10</item>
+					<item name="editor" xsi:type="array">
+						<item name="editorType" xsi:type="string">text</item>
+						<item name="validation" xsi:type="array">
+							<item name="required-entry" xsi:type="boolean">true</item>
+						</item>
+					</item>
+				</item>
+			</argument>
+		</column>
+
+		<column name="TRX_DATE">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dateFormat" xsi:type="string">Y-MM-dd HH:mm:ss</item>
+					<item name="label" translate="true" xsi:type="string">TRX_DATE</item>
+					<item name="sortOrder" xsi:type="number">15</item>
+					<item name="resizeEnabled" xsi:type="boolean">false</item>
+            		<item name="resizeDefaultWidth" xsi:type="string">10</item>
+				</item>
+			</argument>
+		</column>
+
+        <column name="TAMER_ITEM_NO">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="filter" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">TAMER ITEM NO</item>
+					<item name="sortOrder" xsi:type="number">20</item>
+					<item name="resizeEnabled" xsi:type="boolean">false</item>
+            		<item name="resizeDefaultWidth" xsi:type="string">10</item>
+					<item name="editor" xsi:type="array">
+						<item name="editorType" xsi:type="string">text</item>
+						<item name="validation" xsi:type="array">
+							<item name="required-entry" xsi:type="boolean">true</item>
+						</item>
+					</item>
+				</item>
+			</argument>
+		</column>
+
+        <column name="CUSTOMER_ITEM_NUMBER">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="filter" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">CUSTOMER ITEM NUMBER</item>
+					<item name="sortOrder" xsi:type="number">25</item>
+					<item name="resizeEnabled" xsi:type="boolean">false</item>
+            		<item name="resizeDefaultWidth" xsi:type="string">10</item>
+					<item name="editor" xsi:type="array">
+						<item name="editorType" xsi:type="string">text</item>
+						<item name="validation" xsi:type="array">
+							<item name="required-entry" xsi:type="boolean">true</item>
+						</item>
+					</item>
+				</item>
+			</argument>
+		</column>
+
+        <column name="UNIT_PRICE">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="filter" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">UNIT PRICE</item>
+					<item name="sortOrder" xsi:type="number">30</item>
+					<item name="resizeEnabled" xsi:type="boolean">false</item>
+            		<item name="resizeDefaultWidth" xsi:type="string">10</item>
+					<item name="editor" xsi:type="array">
+						<item name="editorType" xsi:type="string">text</item>
+						<item name="validation" xsi:type="array">
+							<item name="required-entry" xsi:type="boolean">false</item>
+						</item>
+					</item>
+				</item>
+			</argument>
+		</column>
+
+        <column name="UOM_CODE">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="filter" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">UOM CODE</item>
+					<item name="sortOrder" xsi:type="number">35</item>
+					<item name="resizeEnabled" xsi:type="boolean">false</item>
+            		<item name="resizeDefaultWidth" xsi:type="string">10</item>
+					<item name="editor" xsi:type="array">
+						<item name="editorType" xsi:type="string">text</item>
+						<item name="validation" xsi:type="array">
+							<item name="required-entry" xsi:type="boolean">true</item>
+						</item>
+					</item>
+				</item>
+			</argument>
+		</column>
+
+        <column name="QTY">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="filter" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">QTY</item>
+					<item name="sortOrder" xsi:type="number">40</item>
+					<item name="resizeEnabled" xsi:type="boolean">false</item>
+            		<item name="resizeDefaultWidth" xsi:type="string">10</item>
+					<item name="editor" xsi:type="array">
+						<item name="editorType" xsi:type="string">text</item>
+						<item name="validation" xsi:type="array">
+							<item name="required-entry" xsi:type="boolean">false</item>
+						</item>
+					</item>
+				</item>
+			</argument>
+		</column>
+
+        <actionsColumn name="actions" class="Os\DsfhCustomer\Ui\Component\Listing\Column\SuggestedActions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
+                    <item name="indexField" xsi:type="string">DSFH_CUSTOMER_SUGGESTED_ID</item>
+                </item>
+            </argument>
+        </actionsColumn>
+
+	</columns>
+
+</listing>

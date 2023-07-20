@@ -1,0 +1,193 @@
+<?xml version="1.0" ?>
+
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">dsfhcustomer_suggesteds_form.dsfhcustomer_suggesteds_form_data_source</item>
+			<item name="deps" xsi:type="string">dsfhcustomer_suggesteds_form.dsfhcustomer_suggesteds_form_data_source</item>
+		</item>
+
+		<item name="label" translate="true" xsi:type="string">General Information</item>
+
+		<item name="config" xsi:type="array">
+			<item name="dataScope" xsi:type="string">data</item>
+			<item name="namespace" xsi:type="string">dsfhcustomer_suggesteds_form</item>
+		</item>
+
+		<item name="template" xsi:type="string">templates/form/collapsible</item>
+		<item name="buttons" xsi:type="array">
+			<item name="back" xsi:type="string">Os\DsfhCustomer\Block\Adminhtml\Suggested\Edit\BackButton</item>
+          	<item name="delete" xsi:type="string">Os\DsfhCustomer\Block\Adminhtml\Suggested\Edit\DeleteButton</item>
+           	<item name="reset" xsi:type="string">Os\DsfhCustomer\Block\Adminhtml\Suggested\Edit\ResetButton</item> 
+           	<item name="save_and_continue" xsi:type="string">Os\DsfhCustomer\Block\Adminhtml\Suggested\Edit\SaveAndContinueButton</item>
+            <item name="save" xsi:type="string">Os\DsfhCustomer\Block\Adminhtml\Suggested\Edit\SaveButton</item>
+		</item>
+	</argument>
+
+	<dataSource name="dsfhcustomer_suggesteds_form_data_source">
+
+		<argument name="dataProvider" xsi:type="configurableObject">
+			<argument name="class" xsi:type="string">Os\DsfhCustomer\Model\Suggested\DataProvider</argument>
+			<argument name="name" xsi:type="string">dsfhcustomer_suggesteds_form_data_source</argument>
+			<argument name="primaryFieldName" xsi:type="string">DSFH_CUSTOMER_SUGGESTED_ID</argument>
+			<argument name="requestFieldName" xsi:type="string">id</argument>
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="submit_url" path="*/*/save" xsi:type="url"/>
+				</item>
+			</argument>
+		</argument>
+
+		<argument name="data" xsi:type="array">
+			<item name="js_config" xsi:type="array">
+				<item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+			</item>
+		</argument>
+
+	</dataSource>
+
+	<fieldset name="General">
+
+		<argument name="data" xsi:type="array">
+			<item name="config" xsi:type="array">
+				<item name="label" xsi:type="string"/>
+			</item>
+		</argument>
+
+		<field name="REQUEST_ID">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">REQUEST ID</item>
+					<item name="formElement" xsi:type="string">input</item>
+					<item name="source" xsi:type="string">suggested</item>
+					<item name="sortOrder" xsi:type="number">5</item>
+					<item name="dataScope" xsi:type="string">REQUEST_ID</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+
+		<field name="TRX_DATE">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">string</item>
+					<item name="label" xsi:type="string" translate="true">TRX DATE</item>
+					<item name="formElement" xsi:type="string">date</item>
+					<item name="source" xsi:type="string">suggested</item>
+					<item name="sortOrder" xsi:type="number">10</item>
+					<item name="dataScope" xsi:type="string">TRX_DATE</item>
+					<item name="options" xsi:type="array">
+						<item name="dateFormat" xsi:type="string">yyyy-MM-dd</item>
+						<item name="timeFormat" xsi:type="string">HH:mm:ss</item>
+						<item name="showsTime" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+
+		<field name="TAMER_ITEM_NO">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">TAMER ITEM NO</item>
+					<item name="formElement" xsi:type="string">input</item>
+					<item name="source" xsi:type="string">suggested</item>
+					<item name="sortOrder" xsi:type="number">15</item>
+					<item name="dataScope" xsi:type="string">TAMER_ITEM_NO</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+
+        <field name="CUSTOMER_ITEM_NUMBER">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">CUSTOMER ITEM NUMBER</item>
+					<item name="formElement" xsi:type="string">input</item>
+					<item name="source" xsi:type="string">suggested</item>
+					<item name="sortOrder" xsi:type="number">20</item>
+					<item name="dataScope" xsi:type="string">CUSTOMER_ITEM_NUMBER</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+
+		<field name="CUSTOMER_ITEM_DESCRIPTIOA" template="ui/form/field" sortOrder="25" formElement="wysiwyg">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="wysiwygConfigData" xsi:type="array">
+                        <item name="height" xsi:type="string">50px</item>
+                        <item name="add_variables" xsi:type="boolean">false</item>
+                        <item name="add_widgets" xsi:type="boolean">false</item>
+                        <item name="add_images" xsi:type="boolean">false</item>
+                        <item name="add_directives" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="source" xsi:type="string">suggested</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">CUSTOMER ITEM DESCRIPTIOA</label>
+                <dataScope>CUSTOMER_ITEM_DESCRIPTIOA</dataScope>
+            </settings>
+        </field>
+
+		<field name="UNIT_PRICE">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">UNIT PRICE</item>
+					<item name="formElement" xsi:type="string">input</item>
+					<item name="source" xsi:type="string">suggested</item>
+					<item name="sortOrder" xsi:type="number">30</item>
+					<item name="dataScope" xsi:type="string">UNIT_PRICE</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">false</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+
+		<field name="UOM_CODE">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">UOM CODE</item>
+					<item name="formElement" xsi:type="string">input</item>
+					<item name="source" xsi:type="string">suggested</item>
+					<item name="sortOrder" xsi:type="number">35</item>
+					<item name="dataScope" xsi:type="string">UOM_CODE</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+
+        <field name="QTY">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">QTY</item>
+					<item name="formElement" xsi:type="string">input</item>
+					<item name="source" xsi:type="string">suggested</item>
+					<item name="sortOrder" xsi:type="number">60</item>
+					<item name="dataScope" xsi:type="string">QTY</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">false</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+    
+	</fieldset>
+
+</form>

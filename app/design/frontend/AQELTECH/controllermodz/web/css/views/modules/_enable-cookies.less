@@ -1,0 +1,75 @@
+//
+//  Amasty JetTheme Enable Cookies Page Styles
+//  _____________________________________________
+
+//
+//  Common
+//  ---------------------------------------------
+
+.amtheme-cookies-container {
+    & {
+        &:extend(.amtheme-noroute-container all);
+
+        margin: 0;
+    }
+
+    .amtheme-description p:not(:first-of-type) {
+        margin-top: 60px;
+    }
+}
+
+.amtheme-browsers-list {
+    & {
+        &:extend(.amtheme-save-links all);
+    }
+
+    > .amtheme-item:not(:first-child) {
+        margin-top: 0;
+    }
+}
+
+.cms-enable-cookies .page-title-wrapper {
+    display: none;
+}
+
+//
+//  Tablet+
+//  ---------------------------------------------
+
+@media screen and (min-width: @screen__l), print {
+    .amtheme-cookies-container {
+        .amtheme-image {
+            min-width: 550px;
+        }
+
+        .amtheme-description {
+            .am-margin-left(@indent__l);
+        }
+    }
+
+    .amtheme-browsers-list {
+        & {
+            flex-direction: column;
+        }
+
+        > .amtheme-item:not(:first-child) {
+            margin: 0 0 @indent__s 0;
+        }
+    }
+}
+
+//
+//  Desktop
+//  ---------------------------------------------
+
+@media screen and (min-width: @screen__xl), print {
+    .amtheme-browsers-list {
+        & {
+            flex-direction: row;
+        }
+
+        > .amtheme-item:not(:first-child) {
+            .am-margin(0 0 0 @indent__xl);
+        }
+    }
+}

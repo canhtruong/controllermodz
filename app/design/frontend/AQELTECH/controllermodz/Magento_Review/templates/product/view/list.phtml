@@ -1,0 +1,102 @@
+<?php
+/**
+ * @var $block Magento\Review\Block\Product\View
+ */
+$_items = $block->getReviewsCollection()->getItems();
+$format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+
+//$productId = $block->getProduct()->getId();
+//$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+//$reviewFactory = $objectManager->create('Magento\Review\Model\Review');
+//$product = $objectManager->create('Magento\Catalog\Model\Product')->load($productId);
+//$storeManager  = $objectManager->create('\Magento\Store\Model\StoreManagerInterface');
+//$storeId = $storeManager->getStore()->getStoreId();
+//$reviewFactory->getEntitySummary($product, $storeId);
+//
+//$ratingSummary = $product->getRatingSummary()->getRatingSummary();
+//$reviewCount = $product->getRatingSummary()->getReviewsCount();
+
+?>
+<?php if (count($_items)):?>
+    <div class="block review-list" id="customer-reviews">
+<!--        <div class="block-title">-->
+<!--            <strong>--><?php ///* @escapeNotVerified */ echo __('CUSTOMER REVIEWS'. ' ('.count($_items).' reviews)') ?><!--</strong>-->
+<!---->
+<!--        </div>-->
+        <div class="block-content">
+            <div class="toolbar review-toolbar">
+                <?php echo $block->getChildHtml('toolbar') ?>
+            </div>
+            <ol class="items review-items" style="list-style: none !important;">
+                <?php foreach ($_items as $_review):?>
+                    <li class="item review-item" itemscope itemprop="review" itemtype="http://schema.org/Review">
+                        <div class="review-details">
+                            <p class="review-author">
+                                <span class="review-details-label"><?php /* @escapeNotVerified */ echo __('Reviewed by')?></span>
+                                <strong class="review-details-value" itemprop="author" style="color: #FFFFFF"><?php echo $block->escapeHtml($_review->getNickname()) ?></strong>
+                                <span class="review-details-label"><?php /* @escapeNotVerified */ echo __(' on') ?></span>
+                                <time class="review-details-value" itemprop="datePublished" datetime="<?php /* @escapeNotVerified */ echo $block->formatDate($_review->getCreatedAt(), $format) ?>"><?php /* @escapeNotVerified */ echo $block->formatDate($_review->getCreatedAt(), $format) ?></time>
+                            </p>
+                        </div>
+                        <?php if (count($_review->getRatingVotes())): ?>
+                            <div class="review-ratings">
+                                <?php foreach ($_review->getRatingVotes() as $_vote): ?>
+                                    <div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                                        <!--                                        <span class="label rating-label"><span>--><?php //echo $block->escapeHtml($_vote->getRatingCode()) ?><!--</span></span>-->
+                                        <div class="rating-result" title="<?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%">
+                                            <meta itemprop="worstRating" content = "1"/>
+                                            <meta itemprop="bestRating" content = "100"/>
+                                            <span style="width:<?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%">
+                                                <span itemprop="ratingValue"><?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+<!--                        <div class="review-title" itemprop="name">--><?php //echo $block->escapeHtml($_review->getTitle()) ?><!--</div>-->
+                        <div class="review-content" itemprop="description">
+                            <?php echo nl2br($block->escapeHtml($_review->getDetail())) ?>
+                        </div>
+                        <div style="display: flex">
+                            <strong><?php echo __('Verified Purchase') ?></strong>
+                            <span style="width: 20px; display: inline-block; margin-left: 5px;">
+                                <svg data-name="Layer 1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m22.41 10.59-2.05-2.05V5.63a2 2 0 0 0-2-2h-2.9l-2.05-2a2 2 0 0 0-2.82 0L8.54 3.64H5.63a2 2 0 0 0-2 2v2.9l-2 2.05A2 2 0 0 0 1 12a2 2 0 0 0 .58 1.41l2.06 2.05v2.91a2 2 0 0 0 2 2h2.9l2.05 2.05A2 2 0 0 0 12 23a2 2 0 0 0 1.41-.58l2.05-2.06h2.91a2 2 0 0 0 2-2v-2.9l2.05-2.05a2 2 0 0 0 0-2.82Zm-4.05 4.05v3.72h-3.72L12 21l-2.64-2.64H5.64v-3.72L3 12l2.64-2.64V5.64h3.72L12 3l2.64 2.64h3.72v3.72L21 12Z" fill="#03cf62" class="fill-000000"></path><path d="m11 12.73-2.29-2.29-1.42 1.41L11 15.56l5.71-5.71-1.42-1.41L11 12.73z" fill="#03cf62" class="fill-000000"></path></svg>
+                            </span>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+            <div class="toolbar review-toolbar">
+                <?php echo $block->getChildHtml('toolbar') ?>
+            </div>
+        </div>
+    </div>
+<?php endif;?>
+<style>
+    .amasty-jet-theme.am-tabs-view .am-custom-tab .amtheme-reviews-aside .amtheme-title {
+        display: none !important;
+    }
+    .amtheme-content .amtheme-rating-wrap{
+    }
+    .review-list .review-title {
+        color: lightgray !important;
+    }
+    .review-list .review-content {
+        color: lightgray !important;
+        margin-bottom: 20px !important;
+    }
+    .review-list .review-ratings {
+        margin-top: -20px !important;
+        margin-bottom: 10px !important;
+    }
+    .review-list .review-ratings .rating-summary{
+        margin-bottom: 5px !important;
+    }
+    .review-list .review-item {
+        border-top: 1px dashed #9999 !important
+    }
+    /*.amtheme-reviews-aside .amtheme-rating-number {*/
+    /*    display: none !important;*/
+    /*}*/
+</style>

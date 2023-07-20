@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+
+	<router id="admin">
+
+		<route frontName="dsfhcustomer" id="dsfhcustomer">
+
+			<module before="Magento_Backend" name="Os_DsfhCustomer"/>
+
+		</route>
+
+	</router>
+
+</config>
+

@@ -1,0 +1,18 @@
+"Join","Subscribe", module, Magento_Newsletter
+"My Cart,","Your Basket", module, Magento_Checkout
+"Cart Subtotal","Subtotal", module, Magento_Checkout
+"Remove Item","Delete", module, Magento_Checkout
+"Details","See Details", module, Magento_Checkout
+"Summary","Order Summary", module, Magento_Checkout
+"Shopping Cart","Your Basket", module, Magento_Checkout
+"Order Total","Total", module, Magento_Checkout
+"Shipping","Delivery", module, Magento_Checkout
+"Tax","VAT", module, Magento_Checkout
+"Contact information","Shipping Address", module, Magento_Checkout
+"For delivery questions.","For Delivery Only.", module, Magento_Checkout
+"Please Fill All Require Field!","Please Complete All Required Fields!", module, Magento_Checkout
+"Zip/Postal Code","Postal Code", module, Magento_Checkout
+"State/Province","County", module, Magento_Checkout
+"Write Us","Email Us", module, Magento_Contact
+"Jot us a note and we’ll get back to you as quickly as possible.","We aim to respond to all emails within 24 hours (Mon-Fri)", module, Magento_Contact
+"Continue Paypal","Continue to PayPal", module, Bss_OneStepCheckout

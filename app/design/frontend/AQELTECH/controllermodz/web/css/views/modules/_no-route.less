@@ -1,0 +1,101 @@
+//
+//  Amasty JetTheme Page 404 Styles
+//  _____________________________________________
+
+//
+//  Common
+//  ---------------------------------------------
+
+.amtheme-noroute-container {
+    & {
+        display: flex;
+        margin: @indent__s 0;
+    }
+
+    .amtheme-wrapper {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .amtheme-title {
+        margin-bottom: @indent__sm;
+    }
+
+    .amtheme-subtitle {
+        margin: @indent__l 0 @indent__sm;
+    }
+
+    .amtheme-wrapper {
+        margin: auto;
+        max-width: 490px;
+    }
+
+    .amtheme-image,
+    .amtheme-description {
+        margin: auto;
+        width: 100%;
+    }
+}
+
+.amtheme-save-links {
+    & {
+        display: flex;
+        flex-direction: column;
+        margin-top: @indent__l;
+        list-style: none;
+        padding-inline-start: 0;
+    }
+
+    > .amtheme-item:not(:first-child) {
+        margin-top: @indent__l;
+    }
+}
+
+//
+//  Mobile+
+//  ---------------------------------------------
+
+@media screen and (min-width: @screen__xs), print {
+    .amtheme-save-links {
+        & {
+            flex-direction: row;
+        }
+
+        > .amtheme-item:not(:first-child) {
+            .am-margin(0 0 0 @indent__m);
+        }
+    }
+}
+
+//
+//  Tablet+
+//  ---------------------------------------------
+
+@media screen and (min-width: @screen__l), print {
+    .amtheme-noroute-container {
+        & {
+            margin: 70px 0;
+        }
+
+        .amtheme-wrapper {
+            flex-wrap: nowrap;
+            max-width: none;
+        }
+
+        .amtheme-image,
+        .amtheme-description {
+            width: auto;
+        }
+
+        .amtheme-image {
+            order: 0;
+            margin: 0;
+        }
+
+        .amtheme-description {
+            order: 1;
+            .am-margin(0 0 0 60px);
+        }
+    }
+}

@@ -1,0 +1,41 @@
+<div class="input-box aa <?php
+echo "aaaaaaaaaaaaaaaa";
+?>" style="border: 1px solid #ccc;padding: 15px 12px 24px 12px;border-bottom: 0;">
+	<p class="step-title" id="orderconfirmttitle" >Order Confirmation</p>
+	<p style="font-size:12px;
+ font-weight:bold;
+ text-transform:uppercase;
+ margin:0 0 15px 2px;
+ color:#333;">Additional Information 1</p>
+    <input type="text" name="customCheckbox" id="order-customCheckbox" value="" data-bind="event: {change: CheckVals}" class="input-text required-entry" placeholder="Customer PO number *">
+    <input type="text" name="orderrequesid" id="order-orderrequesid" value="<?php if(isset($_GET['suggested_order'])){echo $_GET['suggested_order'];};?>" class="input-text" style="display: none;" placeholder="Order Request ID">
+    <input type="text" name="orderorgid" id="order-orderorgid" value="<?php if(isset($_GET['org_id'])){echo $_GET['org_id'];};?>" class="input-text" style="display: none;" placeholder="Org ID">
+</div>    
+<style type="text/css">
+	#orderconfirmttitle{ border-bottom: 1px solid #ccc;margin-bottom: 20px; }
+	.sp-checkout-orderattachment .payment-option-title{ padding-left: 3px }
+	.sp-checkout-orderattachment .payment-option-title{ border-top: 0 !important;}
+	
+	
+</style>
+
+<script type="text/javascript">
+      require([
+        'jquery',
+        'mage/template',
+        "prototype",
+    ], function (jQuery) {
+
+    jQuery(document).ready(function() {
+        <?php if(isset($_GET['suggested_order'])){ ?>
+        alert($_GET['org_id']);
+        jQuery('#order-orderrequesid').val(<?php echo $_GET['suggested_order'];?>);
+        jQuery('#order-orderorgid').val(<?php echo $_GET['org_id'];?>);
+        <?php }else{ 
+            // $session = Mage::getSingleton("core/session",  array("name"=>"frontend"));
+            ?>
+            // jQuery('#order-orderrequesid').val(<?php echo $session->getData("suggested_order_number");?>);
+        <?php } ?>    
+    });    
+    });
+</script>

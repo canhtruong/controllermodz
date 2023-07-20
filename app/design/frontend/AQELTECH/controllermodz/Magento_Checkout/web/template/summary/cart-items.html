@@ -1,0 +1,48 @@
+<div class="block items-in-cart"
+     data-bind="mageInit: {
+        'amCollapsible':{
+            'openedState': 'active',
+            'isMobileOnly': true,
+            'mediaBreakpoint': '(max-width: 1024px)',
+            'isActive': true,
+            'collapseOptions': {
+                'active': true
+            }
+        }
+    }">
+    <div class="title" data-role="title" data-amcollapsible="title">
+        <strong role="heading" aria-level="1">
+            <translate args="maxCartItemsToDisplay" if="maxCartItemsToDisplay < getCartLineItemsCount()"></translate>
+            <translate args="'of'" if="maxCartItemsToDisplay < getCartLineItemsCount()"></translate>
+            <span data-bind="text: getCartSummaryItemsCount()"></span>
+            <translate args="'Item in Cart'" if="getCartSummaryItemsCount() === 1"></translate>
+            <translate args="'Items in Cart'" if="getCartSummaryItemsCount() > 1"></translate>
+        </strong>
+        <svg class="amtheme-icon" focusable="false">
+            <use xlink:href="#icon-arrow-top"></use>
+        </svg>
+    </div>
+    <div class="content minicart-items" data-role="content" data-amcollapsible="content">
+        <div class="minicart-items-wrapper overflowed">
+            <ol class="minicart-items">
+                <each args="items()">
+                    <li class="product-item">
+                        <div class="product">
+                            <each args="$parent.elems()" render=""></each>
+                        </div>
+                    </li>
+                </each>
+            </ol>
+            <div class="actions-toolbar" if="maxCartItemsToDisplay < getCartLineItemsCount()">
+                <div class="secondary">
+                    <a class="action viewcart amtheme-sliding-icon" data-bind="attr: {href: cartUrl, title: $t('View and Edit Cart')}">
+                        <span data-bind="i18n: 'View and Edit Cart'"></span>
+                        <svg class="amtheme-icon" focusable="false">
+                           <use xlink:href="#icon-arrow-right-min"></use>
+                       </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

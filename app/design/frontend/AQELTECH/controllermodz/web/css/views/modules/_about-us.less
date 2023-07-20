@@ -1,0 +1,142 @@
+//
+//  Amasty JetTheme About Us Page Styles
+//  _____________________________________________
+
+//
+//  Common
+//  ---------------------------------------------
+
+.amtheme-aboutus-container {
+    p:not(:first-child) {
+        margin-top: @indent__sm;
+    }
+
+    .amtheme-subtitle {
+        margin-bottom: @indent__sm;
+        font-size: @h1__font-size;
+    }
+
+    .amtheme-item:not(:first-child) {
+        margin-top: 60px;
+    }
+
+    .amtheme-image:not(:first-child) {
+        margin-top: @indent__m;
+    }
+
+    .amtheme-item.-mission .amtheme-image img {
+        width: 100%;
+    }
+
+    .cms-content-important {
+        & {
+            .am-margin(0 -@layout__width-xs-indent @indent__sm);
+            .am-padding(0);
+        }
+
+        .amtheme-description {
+            .am-padding(@indent__base @indent__m);
+        }
+    }
+}
+
+//
+//  Mobile+
+//  ---------------------------------------------
+
+@media all and (min-width: @screen__xs), print {
+    .amtheme-aboutus-container .cms-content-important {
+        .am-margin(0 -@layout__width-m-indent @indent__sm);
+    }
+}
+
+//
+//  Tablet
+//  ---------------------------------------------
+
+@media all and (min-width: @screen__m), print {
+    .page-title {
+        margin-bottom: 65px;
+    }
+
+    .amtheme-aboutus-container {
+        .amtheme-item {
+            display: flex;
+        }
+
+        .amtheme-item.-about .amtheme-image {
+            .am-margin(0 0 0 @indent__base);
+            min-width: 430px;
+        }
+
+        .amtheme-item.-mission {
+            align-items: center;
+        }
+
+        .amtheme-item.-mission .amtheme-image {
+            margin: @indent__sm;
+            min-width: 370px;
+            font-size: 0;
+        }
+
+        .amtheme-item.-mission .amtheme-description {
+            .am-padding(12px @indent__base);
+        }
+
+        .amtheme-item.-mission .amtheme-description p {
+            margin-bottom: 0;
+            font-size: 1.6rem;
+        }
+
+        .amtheme-subtitle {
+            margin-top: 0;
+            font-size: 1.8rem;
+        }
+
+        .cms-content-important {
+            margin: 0;
+            font-weight: inherit;
+        }
+    }
+}
+
+//
+//  Tablet+
+//  ---------------------------------------------
+
+@media all and (min-width: @screen__l), print {
+    .amtheme-aboutus-container {
+        .amtheme-item {
+            align-items: center;
+        }
+
+        .amtheme-subtitle {
+            margin-bottom: @indent__l;
+        }
+
+        .amtheme-item.-about .amtheme-image,
+        .amtheme-item.-mission .amtheme-image {
+            min-width: 570px;
+        }
+
+        .amtheme-item.-mission .amtheme-image {
+            margin: 0;
+        }
+    }
+}
+
+//
+//  Desktop
+//  ---------------------------------------------
+
+@media all and (min-width: @screen__xl), print {
+    .amtheme-aboutus-container {
+        .amtheme-item.-about .amtheme-image {
+            .am-margin-left(45px);
+        }
+
+        .amtheme-item.-mission .amtheme-description {
+            .am-padding(45px);
+        }
+    }
+}

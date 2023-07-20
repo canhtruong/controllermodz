@@ -1,0 +1,131 @@
+//
+//  Amasty JetTheme Privacy Policy Page Styles
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@amtheme-icon-arrow__background-image:  ~'url("../svg/@{amtheme__icons__color-mode-prefix}/@{amtheme__icons__mode}/arrow-bottom.svg")';
+
+//
+//  Common
+//  ---------------------------------------------
+
+.amtheme-privacy-container {
+    & {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    > .amtheme-menu {
+        width: 100%;
+    }
+
+    > .amtheme-content {
+        box-sizing: border-box;
+        width: 100%;
+    }
+}
+
+.amtheme-collapsible-container {
+    & {
+        margin: 0 -@layout__width-xs-indent 30px;
+        padding: 0 @layout__width-xs-indent;
+        background: @amtheme__background-secondary__color;
+    }
+
+    .amtheme-title {
+        position: relative;
+        box-sizing: border-box;
+        padding: @indent__sm @indent__base @indent__sm 0;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .amtheme-title:after {
+        .am-vertical-center();
+
+        position: absolute;
+        right: 0;
+        width: 20px;
+        height: 20px;
+        background: @amtheme-icon-arrow__background-image no-repeat 100%;
+        background-size: contain;
+        content: '';
+        transition: transform @amtheme__transition__delay @amtheme__transition__func;
+    }
+
+    &.-active .amtheme-title:after {
+        transform: translateY(-50%) rotateZ(180deg);
+    }
+
+    .amtheme-content {
+        padding: @indent__xs 0;
+    }
+
+    .amtheme-items {
+        margin: 0;
+        padding: 0;
+        list-style: none none;
+    }
+
+    .amtheme-item {
+        margin: 0 0 @indent__s;
+        padding: 2px 0;
+    }
+
+    .amtheme-item a {
+        color: @amtheme__text-primary__color;
+        font-weight: @font-weight__regular;
+    }
+
+    .amtheme-item a:hover {
+        color: @amtheme__secondary__color;
+        font-weight: @font-weight__regular;
+    }
+}
+
+//
+//  Mobile+
+//  ---------------------------------------------
+
+@media all and (min-width: @screen__xs), print {
+    .amtheme-collapsible-container {
+        margin: 0 -@layout__width-m-indent 30px;
+        padding: 0 @layout__width-m-indent;
+    }
+}
+
+//
+//  Tablet
+//  ---------------------------------------------
+
+@media all and (min-width: @screen__m), print {
+    .amtheme-privacy-container {
+        > .amtheme-menu {
+            width: 20%;
+        }
+
+        > .amtheme-content {
+            .am-padding-left(45px);
+            width: 80%;
+        }
+    }
+
+    .amtheme-collapsible-container {
+        & {
+            margin: 0;
+            padding: 0;
+            background: none;
+        }
+
+        .amtheme-title {
+            margin-top: -@indent__sm;
+        }
+
+        .amtheme-content {
+            padding: @indent__xs @indent__s @indent__sm;
+        }
+    }
+}

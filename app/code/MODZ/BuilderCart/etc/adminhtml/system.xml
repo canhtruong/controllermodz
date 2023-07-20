@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="modz" translate="label" sortOrder="200">
+            <label>MODZ</label>
+        </tab>
+        <section id="modz_buildercart" translate="label" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Builder Cart</label>
+            <tab>modz</tab>
+            <resource>MODZ_BuilderCart::config</resource>
+            <group id="general" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" type="text">
+                <label>General</label>
+                <field id="enable" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" type="select">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="app_url" translate="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" type="text">
+                    <label>APP URL</label>
+                    <comment>Enter the URL i.e https://builder.controllermodz.co.uk</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

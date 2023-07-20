@@ -1,0 +1,275 @@
+<?php
+
+/**
+ * @var Magento\Catalog\Block\Product\View $block
+ * @var Magento\Framework\Escaper $escaper
+ * @var Amasty\JetTheme\ViewModel\ProductCaret\ProductCaretConfigurationViewModel $viewModel
+ * @var Amasty\JetTheme\ViewModel\ProductPage\ProductPageViewModel $layoutViewModel
+ * @var Amasty\JetTheme\ViewModel\Catalog\Ajax $ajaxViewModel
+ */
+
+// phpcs:ignore
+$_helper = $this->helper(Magento\Catalog\Helper\Output::class);
+$_product = $block->getProduct();
+
+$viewModel = $block->getViewModel();
+$ajaxViewModel = $block->getAjaxViewModel();
+$layoutViewModel = $block->getLayoutViewModel();
+
+$addToCartPosition = $layoutViewModel->getAddToCartPosition();
+$stickyAddToCartView = $viewModel && $_product->isSaleable() ? $viewModel->isProductCaretEnabled() : null;
+
+$isAjaxAddToCartEnabled = $ajaxViewModel && $ajaxViewModel->isEnabledAjaxAddToCart();
+$ajaxAddToCartUrl = $isAjaxAddToCartEnabled ? $ajaxViewModel->getAjaxAddToCartUrl() : null;
+$stickyAuxiliary = $block->getLayout()->renderNonCachedElement('product.info.sticky.auxiliary');
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$soldProduct = $objectManager->get('\Magento\InventorySalesAdminUi\Model\GetSalableQuantityDataBySku')->execute($_product->getSku());
+?>
+
+<div class="product-add-form" <?php if ($stickyAddToCartView === 'horizontal') : ?> data-mage-init='{"amStickyAddToCart":{
+            "isAjaxEnabled": "<?= /* @noEscape */ $isAjaxAddToCartEnabled ?>",
+            "ajaxAddToCartUrl": "<?= /* @noEscape */ $ajaxAddToCartUrl ?>",
+            "prices": {
+                "dataProductId": "<?= $escaper->escapeHtml($_product->getId()) ?>",
+                "priceConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>
+            },
+            "selectors": {
+                 "productStickyParent": "#product-addtocart-button"
+            },
+            "customHtml": "<?= $escaper->escapeJs($stickyAuxiliary) ?>"
+        }}' <?php elseif ($stickyAddToCartView === 'sidebar') : ?> data-mage-init='{"amProductCaret":{}}' <?php endif; ?>>
+    <form data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>" data-amtheme-js="form" action="<?= $escaper->escapeUrl($block->getSubmitUrl($_product)) ?>" method="post" id="product_addtocart_form" class="amtheme-form-cart" <?php if ($_product->getOptions()) : ?> enctype="multipart/form-data" <?php endif; ?>>
+        <input type="hidden" name="product" value="<?= (int)$_product->getId() ?>" />
+        <input type="hidden" name="selected_configurable_option" value="" />
+        <input type="hidden" name="related_product" id="related-products-field" value="" />
+        <input type="hidden" name="item" value="<?= (int)$block->getRequest()->getParam('id') ?>" />
+        <input type="hidden" id="ori_price" name="ori_price" value="<?= $_product->getFinalPrice(1) ?>" />
+        <input type="hidden" id="stock_qty_item" name="stock_qty_item" value="<?= ($soldProduct[0] && $soldProduct[0]['qty']) ? $soldProduct[0]['qty'] : 0 ?>" />
+
+        <?= $block->getBlockHtml('formkey') ?>
+        <?= $block->getChildHtml('form_top') ?>
+
+        <?php if (!$block->hasOptions()) : ?>
+            <?= $block->getChildHtml('product_info_form_content') ?>
+        <?php else : ?>
+            <?php if ($_product->isSaleable() && $block->getOptionsContainer() == 'container1') : ?>
+                <?= $block->getChildChildHtml('options_container') ?>
+            <?php endif; ?>
+        <?php endif; ?>
+
+        <?php if ($_product->isSaleable() && $block->hasOptions() && $block->getOptionsContainer() == 'container2') : ?>
+            <?= $block->getChildChildHtml('options_container') ?>
+        <?php endif; ?>
+
+        <?= $block->getLayout()->createBlock('Magento\Wishlist\Block\Catalog\Product\ProductList\Item\AddTo\Wishlist')->setProduct($_product)->setTemplate("Magento_Wishlist::catalog/product/list/addto/wishlist.phtml")->toHtml();?>
+
+        <div class="amtheme-add-form-bottom -<?= $escaper->escapeHtmlAttr($addToCartPosition) ?>">
+            <?= $block->getChildHtml('product-price-wrap') ?>
+            <?= $block->getChildHtml('product_info_qty') ?>
+            <?php if ($addToCartPosition === 'on-line') : ?>
+                <?= $block->getChildHtml('add_to_cart_button') ?>
+            <?php endif; ?>
+            <?= $block->getChildHtml('form_bottom') ?>
+
+            <?php if ($addToCartPosition === 'under') : ?>
+                <?= $block->getChildHtml('add_to_cart_button') ?>
+            <?php endif; ?>
+
+            <?= $block->getChildHtml('amtheme.product.amazon') ?>
+
+            <?= $block->getChildHtml('amtheme.product.payments') ?>
+            <?= $block->getChildHtml('amtheme.product.actions') ?>
+        </div>
+        <?php
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $currency = $objectManager->get('Magento\Directory\Model\Currency');
+        $priceklarna = $currency->format($_product->getFinalPrice(), ['display'=>\Zend_Currency::NO_SYMBOL], false);
+        ?>
+        <div class="product-klarna" style="margin-bottom: 20px;">
+            <!-- Placement v2 -->
+            <klarna-placement
+                    id="my-klarna-promotion" 
+                    data-key="credit-promotion-badge"
+                    data-locale="en-GB"
+                    data-purchase-amount="<?php echo str_replace(".","", $priceklarna); ?>"
+            ></klarna-placement>
+            <!-- end Placement -->
+            <style type="text/css">
+                #my-klarna-promotion *::part(osm-container){
+                  background-color: #000;
+                }
+
+                #my-klarna-promotion *::part(osm-message),
+                #my-klarna-promotion *::part(osm-cta) {
+                  color: #fff;
+                }
+            </style>
+        </div>
+    </form>
+    <div class="cart-footer">
+        <div class="cart-footer-items">
+            <div class="cart-footer-items-child" style="margin-right: 12px">
+                <svg width="37" height="40" viewBox="0 0 37 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g filter="url(#filter0_d_267_555)">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M20.2502 22.2276C20.5452 21.9748 20.9246 21.8063 21.3248 21.7851L22.2098 21.7219C23.1369 21.6587 23.8743 20.9211 23.9377 19.994L24.0009 19.109C24.0219 18.7086 24.1905 18.3294 24.4434 18.0344L25.0334 17.3601C25.6444 16.6437 25.6444 15.6112 25.0334 14.9158L24.4434 14.2414C24.1906 13.9465 24.0221 13.5671 24.0009 13.1669L23.9377 12.2819C23.8745 11.3547 23.1369 10.6174 22.2098 10.554L21.3248 10.4908C20.9244 10.4698 20.5452 10.3012 20.2502 10.0482L19.5759 9.45824C18.8595 8.84725 17.827 8.84725 17.1316 9.45824L16.4576 9.98531C16.1626 10.2381 15.7832 10.4067 15.383 10.4279L14.498 10.4911C13.5708 10.5543 12.8335 11.2918 12.7701 12.219L12.7069 13.104C12.6859 13.5043 12.5173 13.8835 12.2643 14.1785L11.6743 14.8529C11.0634 15.5693 11.0634 16.6018 11.6743 17.2972L12.2643 17.9715C12.5171 18.2665 12.6857 18.6458 12.7069 19.0461L12.7701 19.9311C12.8333 20.8582 13.5708 21.5956 14.498 21.659L15.383 21.7222C15.7834 21.7432 16.1626 21.9118 16.4576 22.1647L17.1319 22.7547C17.8483 23.3657 18.8808 23.3657 19.5762 22.7547L20.2502 22.2276ZM14.3925 16.1171C14.3925 13.9257 16.1624 12.1557 18.3538 12.1557C20.5451 12.1557 22.3152 13.9256 22.3152 16.1171C22.3152 18.3085 20.5451 20.0784 18.3538 20.0784C16.1626 20.0784 14.3925 18.2873 14.3925 16.1171ZM15.2775 23.0286C15.4039 23.0286 15.5303 23.0919 15.6357 23.1762L16.3097 23.766C16.5837 23.9978 16.8577 24.1664 17.1737 24.2928L15.1298 28.6545C14.9402 29.0971 14.3502 29.1181 14.1184 28.6967L13.1913 27.011C13.0649 26.7792 12.8121 26.6738 12.5803 26.716L10.684 27.0742C10.2204 27.1584 9.86219 26.6738 10.0518 26.2524L12.1589 21.7643C12.6857 22.4386 13.4864 22.9022 14.3924 22.9654L15.2775 23.0286ZM24.5487 21.7643L26.6558 26.2524C26.8664 26.6738 26.4872 27.1373 26.0234 27.0533L24.1271 26.6951C23.8743 26.6529 23.6426 26.7793 23.5162 26.9901L22.589 28.6758C22.3784 29.0762 21.7672 29.055 21.5776 28.6336L19.5337 24.2719C19.8499 24.1455 20.1449 23.9559 20.3977 23.7451L21.072 23.1762C21.1774 23.0918 21.2827 23.0496 21.4302 23.0286L22.3152 22.9654C23.2212 22.881 24.0219 22.4386 24.5487 21.7643ZM19.4916 14.8739L20.5873 15.0846C20.8823 15.1479 20.9877 15.485 20.7981 15.7168L20.0395 16.5386C19.9552 16.6018 19.9131 16.7282 19.9341 16.8336L20.0605 17.9503C20.1027 18.2453 19.8077 18.4559 19.5338 18.3295L18.5224 17.8449C18.4172 17.8027 18.3118 17.8027 18.2064 17.8449L17.195 18.3295C16.9422 18.4561 16.6261 18.2453 16.6683 17.9503L16.7947 16.8336C16.7947 16.7282 16.7735 16.6228 16.6893 16.5386L15.9307 15.7168C15.7411 15.506 15.8465 15.1478 16.1415 15.0846L17.2372 14.8739C17.3425 14.8528 17.4268 14.7896 17.49 14.6843L18.0378 13.6939C18.1642 13.4411 18.5434 13.4411 18.691 13.6939L19.2388 14.6843C19.2808 14.7896 19.3862 14.8528 19.4916 14.8739Z" fill="#03CF62"/>
+                    </g>
+                    <defs>
+                        <filter id="filter0_d_267_555" x="0" y="0" width="36.7158" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                            <feOffset dy="1"/>
+                            <feGaussianBlur stdDeviation="5"/>
+                            <feComposite in2="hardAlpha" operator="out"/>
+                            <feColorMatrix type="matrix" values="0 0 0 0 0.0117647 0 0 0 0 0.811765 0 0 0 0 0.384314 0 0 0 0.5 0"/>
+                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_267_555"/>
+                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_267_555" result="shape"/>
+                        </filter>
+                    </defs>
+                </svg>
+                <span>&nbsp;Shop with confidence</span>
+            </div>
+            <div class="cart-footer-items-child">
+                <svg width="39" height="40" viewBox="0 0 39 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g filter="url(#filter0_d_267_565)">
+                        <path d="M27.7654 12.0088C23.7888 10.0837 21.2425 9.33327 20.6184 9.03332C20.5136 8.98305 20.3904 8.98999 20.292 9.05189C20.1937 9.11379 20.1339 9.22188 20.1339 9.33813V11.3829C20.1339 11.747 19.854 12.0604 19.4902 12.0775C19.3054 12.0864 19.125 12.0194 18.9911 11.8916C18.8572 11.7641 18.7812 11.5871 18.7812 11.4022V9.3383C18.7812 9.22205 18.7216 9.11396 18.6232 9.05206C18.5247 8.99001 18.4015 8.98307 18.2968 9.03334C17.6724 9.33347 15.1258 10.0842 11.1502 12.0088C10.8079 12.1761 10.5191 12.4356 10.3168 12.7584C10.1145 13.0811 10.0064 13.454 10.005 13.8349C10.005 16.4508 9.73223 19.9089 13.2035 23.9414C14.4625 25.9966 16.2012 27.7161 18.2706 28.9523C18.3751 29.0145 18.5051 29.0157 18.6108 28.9555C18.7164 28.8952 18.7817 28.7829 18.7815 28.6612V26.1318C18.7815 25.7676 19.0614 25.4542 19.4252 25.4371C19.61 25.4282 19.7904 25.4954 19.9243 25.623C20.0584 25.7507 20.1342 25.9276 20.1342 26.1127V28.6617C20.1342 28.7831 20.1992 28.8952 20.3046 28.9555C20.4102 29.0157 20.5398 29.0148 20.6443 28.9529C22.8598 27.6294 24.6939 25.7536 25.9673 23.5089C27.2408 21.2643 28.9103 18.7278 28.9103 16.1468V13.835C28.9089 13.4542 28.801 13.0813 28.5985 12.7585C28.3962 12.4357 28.1076 12.176 27.7654 12.0088ZM19.1254 17.7044L20.2308 18.0856C20.8249 18.2904 21.3034 18.7386 21.5468 19.3179C21.79 19.8972 21.7749 20.5527 21.5053 21.1202C21.2355 21.6877 20.7368 22.1134 20.134 22.2907V23.1138C20.134 23.3555 20.0051 23.5786 19.7959 23.6994C19.5866 23.8201 19.3288 23.8201 19.1195 23.6994C18.9103 23.5786 18.7814 23.3553 18.7814 23.1136V22.2905C18.3242 22.1556 17.9228 21.8766 17.6372 21.4949C17.3516 21.1133 17.1968 20.6495 17.1962 20.1729C17.1962 19.9312 17.3251 19.7079 17.5344 19.5871C17.7436 19.4663 18.0015 19.4663 18.2107 19.5871C18.42 19.7079 18.5489 19.9312 18.5489 20.1729C18.5492 20.3995 18.6393 20.6169 18.7997 20.7772C18.96 20.9375 19.1774 21.0277 19.404 21.028H19.511C19.7829 21.028 20.0387 20.8987 20.1999 20.6797C20.361 20.4606 20.4084 20.178 20.3275 19.9184C20.2467 19.6587 20.0471 19.4531 19.79 19.3644L18.6846 18.9832C18.0905 18.7785 17.6118 18.3303 17.3686 17.751C17.1252 17.1716 17.1403 16.5161 17.4101 15.9486C17.6797 15.3811 18.1786 14.9554 18.7814 14.7781V13.9552C18.7814 13.7136 18.9103 13.4904 19.1195 13.3694C19.3288 13.2487 19.5866 13.2487 19.7959 13.3694C20.0051 13.4904 20.134 13.7137 20.134 13.9552V14.7781C20.5912 14.9132 20.9926 15.1922 21.2782 15.5739C21.5638 15.9555 21.7186 16.4193 21.7192 16.8959C21.7192 17.1376 21.5903 17.3609 21.381 17.4817C21.1718 17.6026 20.9139 17.6026 20.7047 17.4817C20.4954 17.3609 20.3665 17.1376 20.3665 16.8959C20.3662 16.6693 20.2761 16.4519 20.1157 16.2916C19.9554 16.1313 19.738 16.0411 19.5114 16.0408H19.4044C19.1325 16.0408 18.8767 16.1702 18.7157 16.3893C18.5544 16.6083 18.5072 16.8909 18.5881 17.1506C18.669 17.4101 18.8683 17.6157 19.1254 17.7044Z" fill="#03CF62"/>
+                    </g>
+                    <defs>
+                        <filter id="filter0_d_267_565" x="0" y="0" width="38.9102" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                            <feOffset dy="1"/>
+                            <feGaussianBlur stdDeviation="5"/>
+                            <feComposite in2="hardAlpha" operator="out"/>
+                            <feColorMatrix type="matrix" values="0 0 0 0 0.0117647 0 0 0 0 0.811765 0 0 0 0 0.384314 0 0 0 0.5 0"/>
+                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_267_565"/>
+                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_267_565" result="shape"/>
+                        </filter>
+                    </defs>
+                </svg>
+                <span>Money-back guarantee</span>
+            </div>
+        </div>
+        <div class="cart-footer-items">
+            <div class="cart-footer-items-child" style="margin-right: 29px">
+                <svg width="43" height="38" viewBox="0 0 43 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g filter="url(#filter0_d_267_563)">
+                        <path d="M13.3051 25.1379C13.3361 25.2309 13.3361 25.3552 13.3361 25.4483C13.3361 26.3172 12.6533 27 11.7843 27C10.9154 27 10.2326 26.3172 10.2326 25.4483C10.2326 25.3552 10.2326 25.2309 10.2636 25.1379H13.3051ZM26.0913 25.1379C26.0603 25.2309 26.0603 25.355 26.0603 25.4481C26.0603 26.317 26.743 26.9998 27.612 26.9998C28.481 26.9998 29.1637 26.317 29.1637 25.4481C29.1637 25.355 29.1637 25.2307 29.1328 25.1376L26.0913 25.1379ZM30.0946 20.7929H32.2669V19.5517H25.7497C25.4083 19.5517 25.1291 19.2724 25.1291 18.931V13.9654H23.8878V21.4137C23.8878 21.7551 23.6086 22.0343 23.2672 22.0343L10 22.0345V23.2758C10 23.6172 10.2793 23.8964 10.6206 23.8964H32.2671V22.0342H30.0947C29.7533 22.0342 29.4741 21.755 29.4741 21.4136C29.4741 21.0724 29.7532 20.7929 30.0946 20.7929ZM27.3325 13.9654H26.3705V18.3101H31.4601L27.3325 13.9654ZM16.8119 11.2964L18.6119 12.6929V9H14.2672V12.6931L16.0672 11.2967C16.2843 11.1412 16.5947 11.1412 16.8119 11.2964ZM22.6463 9H19.8534V13.9656C19.8534 14.2139 19.7293 14.431 19.512 14.5241C19.4189 14.5551 19.3256 14.586 19.2325 14.586C19.1084 14.586 18.9532 14.5551 18.8601 14.462L16.4395 12.5998L14.0188 14.462C13.8326 14.6172 13.5843 14.6482 13.367 14.5241C13.1496 14.431 13.0256 14.2137 13.0256 13.9656V9H10.2326V20.793H22.6463L22.6463 9Z" fill="#03CF62"/>
+                    </g>
+                    <defs>
+                        <filter id="filter0_d_267_563" x="0" y="0" width="42.2666" height="38" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                            <feOffset dy="1"/>
+                            <feGaussianBlur stdDeviation="5"/>
+                            <feComposite in2="hardAlpha" operator="out"/>
+                            <feColorMatrix type="matrix" values="0 0 0 0 0.0117647 0 0 0 0 0.811765 0 0 0 0 0.384314 0 0 0 0.5 0"/>
+                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_267_563"/>
+                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_267_563" result="shape"/>
+                        </filter>
+                    </defs>
+                </svg>
+                <span>FREE UK shipping</span>
+            </div>
+            <div class="cart-footer-items-child">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g filter="url(#filter0_d_267_561)">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M29.6165 16.2495C28.4851 15.3481 26.8051 14.6377 24.8002 14.1995C24.362 12.1947 23.6516 10.5146 22.7502 9.38317C26.0616 10.3286 28.6711 12.9381 29.6165 16.2495L29.6165 16.2495ZM29.6165 21.7505C28.6711 25.062 26.0616 27.6715 22.7502 28.6168C23.6517 27.4854 24.3621 25.8053 24.8003 23.8005C26.8051 23.3623 28.4852 22.6519 29.6166 21.7505L29.6165 21.7505ZM10.383 16.2495C11.3284 12.9381 13.9379 10.3286 17.2493 9.38324C16.3478 10.5147 15.6374 12.1947 15.1992 14.1996C13.1944 14.6378 11.5143 15.3481 10.3829 16.2496L10.383 16.2495ZM10.383 21.7505C11.5144 22.652 13.1944 23.3624 15.1993 23.8006C15.6375 25.8054 16.3479 27.4855 17.2493 28.6169C13.9379 27.6714 11.3284 25.062 10.383 21.7506L10.383 21.7505ZM23.5334 24.0344C22.7914 27.0132 21.4336 29 19.9999 29C18.5662 29 17.2084 27.0134 16.4663 24.0344C17.5786 24.2036 18.7671 24.294 19.9999 24.294C21.2327 24.294 22.4212 24.2036 23.5334 24.0344ZM16.4664 13.9656C17.2084 10.9868 18.5663 9 20 9C21.4337 9 22.7915 10.9866 23.5335 13.9656C22.4212 13.7964 21.2328 13.706 20 13.706C18.7672 13.706 17.5787 13.7964 16.4664 13.9656ZM14.9656 22.5337C11.9867 21.7917 10 20.4338 10 19.0001C10 17.5665 11.9866 16.2086 14.9656 15.4666C14.7964 16.5789 14.706 17.7673 14.706 19.0001C14.706 20.2329 14.7964 21.4214 14.9656 22.5337ZM25.0344 15.4667C28.0132 16.2087 30 17.5665 30 19.0002C30 20.4339 28.0134 21.7917 25.0344 22.5338C25.2036 21.4215 25.294 20.233 25.294 19.0002C25.294 17.7674 25.2036 16.5789 25.0344 15.4667ZM16.2042 22.7958C15.9981 21.6277 15.8823 20.3467 15.8823 19.0002C15.8823 17.6537 15.9981 16.3726 16.2042 15.2045C17.3723 14.9985 18.6533 14.8827 19.9998 14.8827C21.3463 14.8827 22.6274 14.9985 23.7955 15.2045C24.0015 16.3726 24.1173 17.6537 24.1173 19.0002C24.1173 20.3467 24.0015 21.6278 23.7955 22.7958C22.6274 23.0019 21.3463 23.1177 19.9998 23.1177C18.6533 23.1177 17.3722 23.0019 16.2042 22.7958Z" fill="#03CF62"/>
+                    </g>
+                    <defs>
+                        <filter id="filter0_d_267_561" x="0" y="0" width="40" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                            <feOffset dy="1"/>
+                            <feGaussianBlur stdDeviation="5"/>
+                            <feComposite in2="hardAlpha" operator="out"/>
+                            <feColorMatrix type="matrix" values="0 0 0 0 0.0117647 0 0 0 0 0.811765 0 0 0 0 0.384314 0 0 0 0.5 0"/>
+                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_267_561"/>
+                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_267_561" result="shape"/>
+                        </filter>
+                    </defs>
+                </svg>
+                <span>Worldwide shipping available</span>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .cart-footer{
+        flex-direction: column;
+        width: 100%;
+    }
+    .cart-footer-items {
+        flex-direction: row;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    .cart-footer-items-child{
+        align-items: center;
+        display: flex;
+    }
+    .cart-footer-items-child > span {
+        font-size: 13px;
+        font-weight: 400;
+    }
+    .towishlist-wrap{
+        order: 1;
+        margin-right: -10%;
+    }
+    .towishlist-wrap a {
+        background: #00d578 !important;
+    }
+    .towishlist-wrap a:hover {
+        background: pink !important;
+    }
+</style>
+<script>
+    require([
+        'jquery',
+        'priceBox'
+    ], function($) {
+        if (parseInt($('#stock_qty_item').val()) > 0)
+        {
+            const qtyLeft = parseInt($('#stock_qty_item').val())
+            $('.product-info-stock-sku div').append('<span style="color: #fff;">&nbsp;|&nbsp;</span>')
+            $('.product-info-stock-sku div').append(`<span style="font-family: Abel, sans-serif; font-weight: 600; color: #03cf62;">ONLY ${qtyLeft} LEFT</span>`)
+        }
+        var dataPriceBoxSelector = '[data-role="priceBox"]',
+            dataProductIdSelector = '[data-product-id="<?= $escaper->escapeHtml($_product->getId()) ?>"]',
+            priceBoxes = $(dataPriceBoxSelector + dataProductIdSelector);
+
+        priceBoxes = priceBoxes.filter(function(index, elem) {
+            return $(elem).find('[data-price-type="finalPrice"]').length;
+        });
+        priceBoxes.priceBox({
+            'priceConfig': <?= /* @noEscape */ $block->getJsonConfig() ?>
+        });
+
+
+        let canCalculate = false
+        if ($('#product-options-wrapper'))
+        {
+            const fieldset0 = $('#product-options-wrapper').children()
+            canCalculate = fieldset0.children('div').length === 0
+        }
+        if (canCalculate)
+        {
+            $('#qty').change(function(){
+                const priceQty = $('#ori_price').val() * parseInt($(this).val())
+                $("[data-price-type='finalPrice']").children().text(`£${priceQty.toFixed(2)}`)
+            });
+        }
+
+        if ($('.towishlist-wrap'))
+        {
+            $('.amtheme-add-form-bottom div.product-info-price').after($('.towishlist-wrap'))
+        }
+        if ($('.estimatedDeliveryDate'))
+        {
+            //$('.estimatedDeliveryDate').attr("style", "display:none !important;")
+            $('.product-options-bottom').prepend($('.estimatedDeliveryDate'))
+
+        }
+    });
+</script>

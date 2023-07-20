@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @package Amasty_JetTheme
+ */
+?>
+<?php
+/**
+ * @var $block Magento\Checkout\Block\Cart\Sidebar
+ * @var $viewModel Amasty\JetTheme\ViewModel\Checkout\MinicartViewModel
+ * @var $escaper Magento\Framework\Escaper
+ */
+
+$viewModel = $block->getViewModel();
+$isStickyMinicartEnabled = $viewModel->isStickyMinicartEnabled();
+?>
+
+<div data-block="minicart" class="minicart-wrapper amtheme-header-icon" data-amtheme-js="minicart">
+    <a class="action showcart" href="<?= $escaper->escapeUrl($block->getShoppingCartUrl()) ?>" data-bind="scope: 'minicart_content'" aria-label="<?= $escaper->escapeHtmlAttr(__('Cart')) ?>" title="<?= $escaper->escapeHtmlAttr(__('Cart')) ?>">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36.591" height="35" fill="none" viewBox="0 0 36.591 35">
+            <path d="M11.388 27.443c-1.874 0 -3.406 1.497 -3.406 3.327s1.532 3.327 3.406 3.327 3.406 -1.497 3.406 -3.327 -1.532 -3.327 -3.406 -3.327zM1.432 1.343v3.327h3.406l6.131 12.129 -2.563 4.074a3.134 3.134 0 0 0 -0.426 1.58c0 2.227 1.558 3.327 3.67 3.327h19.91v-3.198H12.067c-0.255 0 -0.426 -0.167 -0.426 -0.415 0 -0.083 0.181 -0.415 0.181 -0.415L13.523 19.128h12.686c1.278 0 2.385 -0.665 2.98 -1.747l6.131 -10.3c0.102 -0.197 0.17 -0.5 0.17 -0.832 0 -0.915 -0.767 -1.58 -1.702 -1.58H8.585L6.967 1.343H1.432zM28.154 27.443c-1.873 0 -3.406 1.497 -3.406 3.327s1.532 3.327 3.406 3.327 3.406 -1.497 3.406 -3.327 -1.532 -3.327 -3.406 -3.327z" fill="#fff"/>
+        </svg>
+        <label><?= $block->escapeHtml(__('Cart')); ?></label>
+        <span class="counter qty empty" data-bind="css: {
+                        empty: !!getCartParam('summary_count') == false && !isLoading()
+                    },
+                    blockLoader: isLoading">
+            <span class="counter-number">
+                <!-- ko if: getCartParam('summary_count') -->
+                    <!-- ko text: getCartParam('summary_count') -->
+                    <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko ifnot: getCartParam('summary_count') -->
+                    0
+                <!-- /ko -->
+            </span>
+            <span class="counter-label">
+                <!-- ko if: getCartParam('summary_count') -->
+                <!-- ko text: getCartParam('summary_count') -->
+                <!-- /ko -->
+                <!-- ko i18n: 'items' -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </span>
+        </span>
+    </a>
+    <?php if ($block->getIsNeedToDisplaySideBar()) : ?>
+        <div class="block block-minicart <?= $isStickyMinicartEnabled ? ' -sticky-minicart' : '' ?>" data-role="dropdownDialog" data-mage-init='{"dropdownDialog":{
+                "appendTo":"[data-block=minicart]",
+                "triggerTarget":".showcart",
+                "timeout": "2000",
+                "closeOnMouseLeave": false,
+                "closeOnEscape": true,
+                "triggerClass":"active",
+                "parentClass":"active",
+                "buttons":[]}}'>
+            <div id="minicart-content-wrapper" class="amtheme-minicart-content" data-bind="scope: 'minicart_content'">
+                <!-- ko template: getTemplate() -->
+                <!-- /ko -->
+            </div>
+            <?= $block->getChildHtml('minicart.addons') ?>
+        </div>
+    <?php endif ?>
+    <script>
+        window.checkout = <?= /* @noEscape */ $block->getSerializedConfig() ?>;
+    </script>
+    <script type="text/x-magento-init">
+        {
+            "[data-block='minicart']": {
+                "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+            },
+            "*": {
+                <?php if (!$block->getIsNeedToDisplaySideBar()) : ?>
+                    "Magento_Checkout/js/action-no-sidebar": {},
+                <?php endif ?>
+                "Magento_Ui/js/block-loader": "<?= $escaper->escapeJs(
+                                                    $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))
+                                                ) ?>"
+            }
+        }
+    </script>
+</div>

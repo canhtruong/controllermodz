@@ -1,0 +1,11 @@
+--- a/Model/Currency/Import/FixerIo.php	2021-07-13 22:08:00.000000000 +0300
++++ b/Model/Currency/Import/FixerIo.php	2022-08-24 17:07:03.669420800 +0300
+@@ -17,7 +17,7 @@
+     /**
+      * @var string
+      */
+-    const CURRENCY_CONVERTER_URL = 'http://data.fixer.io/api/latest?access_key={{ACCESS_KEY}}'
++    const CURRENCY_CONVERTER_URL = 'https://api.apilayer.com/fixer/latest?apikey={{ACCESS_KEY}}'
+         . '&base={{CURRENCY_FROM}}&symbols={{CURRENCY_TO}}';
+ 
+     /**

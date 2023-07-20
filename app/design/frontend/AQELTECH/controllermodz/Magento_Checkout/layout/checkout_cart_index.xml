@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<page layout="1column"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <move element="cart.discount" destination="cart.summary" after="checkout.cart.totals.container" />
+        <!-- 		<referenceBlock name="checkout.cart.coupon" remove="true"/> -->
+        <block class="Bss\GiftCard\Block\Cart\GiftCard" name="bss.giftcard.checkout.cart.giftcard" as="giftcard" template="cart/giftcard.phtml"/>
+        <move element="bss.giftcard.checkout.cart.giftcard" destination="cart.summary" after="checkout.cart.totals.container" />
+    </body>
+</page>
+

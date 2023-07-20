@@ -1,0 +1,48 @@
+<!-- Free shipping progress markup -->
+<div class="cart-shipping__wrapper">
+    <p class="cart-shipping__numOuter" style="display: block;"><?= __('You\'re'); ?><span class="cart-shipping__num"></span> <?= __('away from free shipping!'); ?></p>
+    <p class="cart-shipping__success" style="display: none;"><?= __('You\'re eligible for Free Shipping!'); ?></p>
+    <div class="cart-shippingThreshold__bar">
+        <span class="cart-shippingThreshold__progress"></span>
+    </div>
+</div>
+
+<script>
+    require(["jquery"], function($) {
+        $(function() {
+            // to ensure that code evaluates on page load
+            var progressBar = $(".cart-shippingThreshold__progress");
+            var progressNum = $(".cart-shipping__num");
+            var progressOuter = $(".cart-shipping__numOuter");
+            var successMsg = $(".cart-shipping__success");
+            // calculate how far progress is from the total as a percentage
+            var result = Math.round((100 * 50) / 100);
+            progressBar.forEach(function(el) {
+                el.setAttribute("style", "width: ".concat(result, "%"));
+            });
+            // Update the progess text. If threshold is met, show success message
+            var newProgressNum = Math.round(100 - 50);
+            if (newProgressNum <= 0) {
+                successMsg.forEach(function(el) {
+                    el.style.display = "block";
+                });
+                progressOuter.forEach(function(el) {
+                    el.style.display = "none";
+                });
+                progressNum.forEach(function(el) {
+                    el.textContent = newProgressNum;
+                });
+            } else {
+                successMsg.forEach(function(el) {
+                    el.style.display = "none";
+                });
+                progressOuter.forEach(function(el) {
+                    el.style.display = "block";
+                });
+                progressNum.forEach(function(el) {
+                    el.textContent = newProgressNum;
+                });
+            }
+        });
+    });
+</script>
