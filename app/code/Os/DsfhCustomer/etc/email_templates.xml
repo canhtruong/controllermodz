@@ -1,5 +1,0 @@
-<config 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
-    <template id="suggestitem" label="Suggested Order" file="suggestitem.html" type="html" module="Os_DsfhCustomer" area="frontend"/>
-    <template id="escalate" label="Escalate" file="escalate.html" type="html" module="Os_DsfhCustomer" area="frontend"/>
-</config>
